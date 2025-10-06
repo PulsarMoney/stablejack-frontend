@@ -3,12 +3,14 @@
 import type { ThemeProviderProps } from "next-themes";
 
 import * as React from "react";
-import { HeroUIProvider } from "@heroui/system";
 import { useRouter } from "next/navigation";
+
+import { HeroUIProvider } from "@heroui/system";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { QueryProvider } from "@/components/providers/query-provider";
-import { PrivyProviderWrapper } from "@/components/providers/privy-provider";
+
 import { AuthProvider } from "@/components/providers/auth-provider";
+import { PrivyProviderWrapper } from "@/components/providers/privy-provider";
+import { QueryProvider } from "@/components/providers/query-provider";
 
 export interface ProvidersProps {
   children: React.ReactNode;

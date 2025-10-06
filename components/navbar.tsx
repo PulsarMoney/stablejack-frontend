@@ -23,7 +23,6 @@ import {
   TwitterIcon,
   GithubIcon,
   DiscordIcon,
-  HeartFilledIcon,
   SearchIcon,
   Logo,
 } from "@/components/icons";
@@ -105,15 +104,19 @@ export const Navbar = () => {
             </Button>
           ) : isAuthenticated ? (
             <Button
+              className="font-medium"
               color="primary"
               variant="flat"
-              onPress={logout}
-              className="font-medium"
+              onPress={() => logout()}
             >
               {email || `${address.slice(0, 6)}...${address.slice(-4)}`}
             </Button>
           ) : (
-            <Button color="primary" onPress={login} className="font-medium">
+            <Button
+              className="font-medium"
+              color="primary"
+              onPress={() => login()}
+            >
               Connect Wallet
             </Button>
           )}
@@ -150,25 +153,26 @@ export const Navbar = () => {
           ))}
           <NavbarMenuItem>
             {isLoading ? (
-              <Button isDisabled variant="flat" fullWidth>
+              <Button fullWidth isDisabled variant="flat">
                 Loading...
               </Button>
             ) : isAuthenticated ? (
               <Button
-                color="primary"
-                variant="flat"
-                onPress={logout}
                 fullWidth
                 className="font-medium"
+                color="primary"
+                variant="flat"
+                onPress={() => logout()}
               >
-                Disconnect ({email || `${address.slice(0, 6)}...${address.slice(-4)}`})
+                Disconnect (
+                {email || `${address.slice(0, 6)}...${address.slice(-4)}`})
               </Button>
             ) : (
               <Button
-                color="primary"
-                onPress={login}
                 fullWidth
                 className="font-medium"
+                color="primary"
+                onPress={() => login()}
               >
                 Connect Wallet
               </Button>
