@@ -24,33 +24,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
 
   return (
-    <HeroUIProvider
-      navigate={router.push}
-      defaultVariants={{
-        button: {
-          variant: "solid",
-          color: "primary",
-          radius: "full",
-          size: "md",
-        },
-        card: {
-          shadow: "sm",
-          radius: "lg",
-        },
-        input: {
-          variant: "bordered",
-          radius: "lg",
-        },
-        table: {
-          variant: "striped",
-          color: "default",
-        },
-        modal: {
-          backdrop: "opaque",
-          radius: "lg",
-        },
-      }}
-    >
+    <HeroUIProvider navigate={router.push}>
       <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
     </HeroUIProvider>
   );

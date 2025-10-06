@@ -1,3 +1,76 @@
 @import "tailwindcss";
+@config "../tailwind.config.js";
 
-@config "../tailwind.config.js"
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    /* StableJack Brand Colors */
+    --color-burgundy: #6B2C2C;
+    --color-burgundy-dark: #5A2424;
+    --color-burgundy-light: #7D3434;
+    --color-warm-red: #C94545;
+    --color-warm-red-dark: #B33D3D;
+    --color-warm-red-light: #D65656;
+    --color-beige: #F5F0ED;
+    --color-beige-dark: #EBE3DF;
+    --color-beige-light: #FAF7F5;
+    --color-stable-dark: #2D2825;
+    --color-stable-gray: #6B6560;
+    --color-jack-red: #C32E2E;
+    --color-jack-blue: #1A2842;
+    --color-card-bg: #FFFFFF;
+  }
+
+  /* Typography Hierarchy */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+    color: #2D2825;
+  }
+
+  /* Numerical Data Styling */
+  .numeric-data {
+    @apply font-medium tabular-nums text-right;
+  }
+
+  /* Accessibility: Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    * {
+      transform: none !important;
+    }
+  }
+
+  /* Hover Transitions - Only on devices that support hover */
+  @media (hover: hover) and (pointer: fine) {
+    .hover-transition {
+      @apply transition-colors duration-200;
+    }
+  }
+}
+
+/* Animation Utilities */
+@utility animate-ease-out-cubic {
+  animation-timing-function: cubic-bezier(.215, .61, .355, 1);
+}
+
+@utility animate-ease-out-quart {
+  animation-timing-function: cubic-bezier(.165, .84, .44, 1);
+}
+
+/* Will-change optimization for animations */
+@utility will-change-transform {
+  will-change: transform;
+}
+
+@utility will-change-opacity {
+  will-change: opacity;
+}
