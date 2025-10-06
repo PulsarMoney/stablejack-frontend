@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Navbar as HeroUINavbar,
   NavbarContent,
@@ -25,8 +27,12 @@ import {
   SearchIcon,
   Logo,
 } from "@/components/icons";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Navbar = () => {
+  const { isAuthenticated, isLoading, address, email, login, logout } =
+    useAuth();
+
   const searchInput = (
     <Input
       aria-label="Search"
@@ -93,16 +99,24 @@ export const Navbar = () => {
         </NavbarItem>
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
         <NavbarItem className="hidden md:flex">
-          <Button
-            isExternal
-            as={Link}
-            className="text-sm font-normal text-default-600 bg-default-100"
-            href={siteConfig.links.sponsor}
-            startContent={<HeartFilledIcon className="text-danger" />}
-            variant="flat"
-          >
-            Sponsor
-          </Button>
+          {isLoading ? (
+            <Button isDisabled variant="flat">
+              Loading...
+            </Button>
+          ) : isAuthenticated ? (
+            <Button
+              color="primary"
+              variant="flat"
+              onPress={logout}
+              className="font-medium"
+            >
+              {email || `${address.slice(0, 6)}...${address.slice(-4)}`}
+            </Button>
+          ) : (
+            <Button color="primary" onPress={login} className="font-medium">
+              Connect Wallet
+            </Button>
+          )}
         </NavbarItem>
       </NavbarContent>
 
@@ -134,6 +148,32 @@ export const Navbar = () => {
               </Link>
             </NavbarMenuItem>
           ))}
+          <NavbarMenuItem>
+            {isLoading ? (
+              <Button isDisabled variant="flat" fullWidth>
+                Loading...
+              </Button>
+            ) : isAuthenticated ? (
+              <Button
+                color="primary"
+                variant="flat"
+                onPress={logout}
+                fullWidth
+                className="font-medium"
+              >
+                Disconnect ({email || `${address.slice(0, 6)}...${address.slice(-4)}`})
+              </Button>
+            ) : (
+              <Button
+                color="primary"
+                onPress={login}
+                fullWidth
+                className="font-medium"
+              >
+                Connect Wallet
+              </Button>
+            )}
+          </NavbarMenuItem>
         </div>
       </NavbarMenu>
     </HeroUINavbar>
