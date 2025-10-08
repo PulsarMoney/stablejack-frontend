@@ -1,14 +1,7 @@
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Chip } from "@heroui/chip";
 
-interface Referral {
-  id: string;
-  email: string;
-  tier: 1 | 2;
-  volume: number;
-  earnings: number;
-  joinedAt: string;
-}
+import type { Referral } from "@/types/referral";
 
 interface ReferralTreeProps {
   referrals: Referral[];
@@ -57,17 +50,22 @@ export function ReferralTree({ referrals }: ReferralTreeProps) {
             <div className="space-y-3">
               {tier1Referrals.map((referral) => (
                 <div
-                  key={referral.id}
+                  key={referral.userId}
                   className="flex items-center justify-between p-4 bg-beige/50 rounded-lg border border-burgundy/10"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-burgundy/20 flex items-center justify-center">
                       <span className="text-burgundy font-bold">
-                        {referral.email.charAt(0).toUpperCase()}
+                        {referral.email
+                          ? referral.email.charAt(0).toUpperCase()
+                          : referral.walletAddress.slice(2, 3).toUpperCase()}
                       </span>
                     </div>
                     <div>
-                      <p className="font-semibold">{referral.email}</p>
+                      <p className="font-semibold">
+                        {referral.email ||
+                          `${referral.walletAddress.slice(0, 6)}...${referral.walletAddress.slice(-4)}`}
+                      </p>
                       <p className="text-xs text-stable-gray">
                         Joined{" "}
                         {new Date(referral.joinedAt).toLocaleDateString()}
@@ -102,17 +100,22 @@ export function ReferralTree({ referrals }: ReferralTreeProps) {
             <div className="space-y-3 pl-6 border-l-2 border-burgundy/20">
               {tier2Referrals.map((referral) => (
                 <div
-                  key={referral.id}
+                  key={referral.userId}
                   className="flex items-center justify-between p-4 bg-beige/30 rounded-lg border border-burgundy/10"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-burgundy/10 flex items-center justify-center">
                       <span className="text-burgundy font-bold">
-                        {referral.email.charAt(0).toUpperCase()}
+                        {referral.email
+                          ? referral.email.charAt(0).toUpperCase()
+                          : referral.walletAddress.slice(2, 3).toUpperCase()}
                       </span>
                     </div>
                     <div>
-                      <p className="font-semibold">{referral.email}</p>
+                      <p className="font-semibold">
+                        {referral.email ||
+                          `${referral.walletAddress.slice(0, 6)}...${referral.walletAddress.slice(-4)}`}
+                      </p>
                       <p className="text-xs text-stable-gray">
                         Joined{" "}
                         {new Date(referral.joinedAt).toLocaleDateString()}

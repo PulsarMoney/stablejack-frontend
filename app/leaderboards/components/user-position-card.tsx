@@ -12,8 +12,14 @@ export function UserPositionCard({
   userRank,
   selectedTab,
 }: UserPositionCardProps) {
-  const rank = selectedTab === "trading" ? userRank.tradingRank : userRank.publicRank;
-  const xp = selectedTab === "trading" ? userRank.tradingXP : userRank.publicXP;
+  if (!userRank) {
+    return null;
+  }
+
+  const rank =
+    selectedTab === "trading" ? userRank.tradingRank : userRank.publicRank;
+  const xp =
+    selectedTab === "trading" ? userRank.tradingXP : userRank.totalXP;
 
   return (
     <Card className="border-2 border-burgundy bg-burgundy/5">
@@ -24,7 +30,7 @@ export function UserPositionCard({
             <div className="flex items-center gap-3">
               <p className="text-3xl font-bold text-burgundy">#{rank}</p>
               <Chip color="primary" variant="flat">
-                {xp.toLocaleString()} XP
+                {xp?.toLocaleString() || 0} XP
               </Chip>
             </div>
           </div>

@@ -3,14 +3,7 @@ import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
 import { useRouter } from "next/navigation";
 
-interface Referral {
-  id: string;
-  email: string;
-  tier: 1 | 2;
-  volume: number;
-  earnings: number;
-  joinedAt: string;
-}
+import type { Referral } from "@/types/referral";
 
 interface RecentReferralsProps {
   referrals: Referral[];
@@ -32,7 +25,7 @@ export function RecentReferrals({ referrals }: RecentReferralsProps) {
         <div className="space-y-4">
           {referrals.slice(0, 5).map((referral) => (
             <div
-              key={referral.id}
+              key={referral.userId}
               className="flex items-center justify-between p-4 bg-beige/50 rounded-lg"
             >
               <div className="flex items-center gap-4">
@@ -44,7 +37,9 @@ export function RecentReferrals({ referrals }: RecentReferralsProps) {
                   Tier {referral.tier}
                 </Chip>
                 <div>
-                  <p className="font-semibold">{referral.email}</p>
+                  <p className="font-semibold">
+                    {referral.email || `${referral.walletAddress.slice(0, 6)}...${referral.walletAddress.slice(-4)}`}
+                  </p>
                   <p className="text-xs text-stable-gray">
                     Joined {new Date(referral.joinedAt).toLocaleDateString()}
                   </p>

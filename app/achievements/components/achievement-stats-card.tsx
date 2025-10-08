@@ -8,9 +8,9 @@ interface AchievementStatsCardProps {
 }
 
 export function AchievementStatsCard({
-  totalCompleted,
-  totalXPEarned,
-  completionRate,
+  totalCompleted = 0,
+  totalXPEarned = 0,
+  completionRate = 0,
 }: AchievementStatsCardProps) {
   return (
     <Card className="border-2 border-burgundy/20 bg-burgundy/5">
@@ -26,7 +26,7 @@ export function AchievementStatsCard({
           <div>
             <p className="text-sm text-stable-gray mb-1">Total XP Earned</p>
             <p className="text-3xl font-bold text-warm-red">
-              {totalXPEarned.toLocaleString()}
+              {totalXPEarned?.toLocaleString() || 0}
             </p>
           </div>
 
@@ -35,11 +35,11 @@ export function AchievementStatsCard({
             <Progress
               color="success"
               size="md"
-              value={completionRate}
+              value={completionRate || 0}
               aria-label="Completion rate"
             />
             <p className="text-sm font-semibold text-burgundy mt-1">
-              {completionRate.toFixed(1)}%
+              {completionRate?.toFixed(1) || 0}%
             </p>
           </div>
         </div>

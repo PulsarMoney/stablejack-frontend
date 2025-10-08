@@ -31,10 +31,10 @@ export function PrivyProviderWrapper({
     return (
       <div style={{ padding: "20px", color: "red" }}>
         <h2>❌ Privy Configuration Error</h2>
-        <p>
+        <div>
           <strong>NEXT_PUBLIC_PRIVY_APP_ID</strong> is not set.
-        </p>
-        <p>Steps to fix:</p>
+        </div>
+        <div>Steps to fix:</div>
         <ol>
           <li>
             Make sure <code>.env.local</code> exists in the project root
@@ -44,12 +44,12 @@ export function PrivyProviderWrapper({
           </li>
           <li>Restart the dev server completely (stop and start again)</li>
         </ol>
-        <p>
+        <div>
           Available env vars:{" "}
           {Object.keys(process.env)
             .filter((k) => k.startsWith("NEXT_PUBLIC"))
             .join(", ") || "None found"}
-        </p>
+        </div>
       </div>
     );
   }
