@@ -16,7 +16,8 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   icons: {
-    icon: "/favicon.ico",
+    icon: "/stablejack_logo.jpg",
+    apple: "/stablejack_logo.jpg",
   },
 };
 

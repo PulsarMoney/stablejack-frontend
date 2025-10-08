@@ -62,7 +62,7 @@ export function PrivyProviderWrapper({
         appearance: {
           theme: "light",
           accentColor: "#6B2C2C", // Burgundy primary color
-          logo: "/logo.png", // Update with your logo path
+          logo: "/stablejack_logo.jpg",
         },
 
         // Login methods
