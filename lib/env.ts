@@ -12,11 +12,6 @@ function getEnvVar(key: string, required: boolean = true): string {
   const value = process.env[key];
 
   if (required && !value) {
-    console.error(`[ENV ERROR] Missing: ${key}`);
-    console.error(
-      `[ENV] Available env vars:`,
-      Object.keys(process.env).filter((k) => k.startsWith("NEXT_PUBLIC"))
-    );
     throw new Error(`Missing required environment variable: ${key}`);
   }
 
@@ -43,15 +38,3 @@ export const env = {
   // Optional: Chain Configuration (if needed for web3)
   defaultChainId: getEnvVar("NEXT_PUBLIC_DEFAULT_CHAIN_ID", false) || "1",
 } as const;
-
-// Validate on module load in client-side code
-if (typeof window !== "undefined") {
-  console.log("[ENV] Environment variables loaded:", {
-    apiUrl: env.apiUrl,
-    nodeEnv: env.nodeEnv,
-    privyConfigured: !!env.privyAppId,
-    privyAppIdPreview: env.privyAppId
-      ? env.privyAppId.slice(0, 10) + "..."
-      : "NOT SET",
-  });
-}

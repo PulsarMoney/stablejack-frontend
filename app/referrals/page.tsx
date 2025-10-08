@@ -1,19 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-
 import { Button } from "@heroui/button";
 import { useDisclosure } from "@heroui/modal";
-
-import { useAuth } from "@/hooks/useAuth";
-import { useGetReferralStats } from "@/hooks/api/use-referral-api";
 
 import { ApplyCodeModal } from "./components/apply-code-modal";
 import { ReferralCodeCard } from "./components/referral-code-card";
 import { ReferralStatsGrid } from "./components/referral-stats-grid";
 import { ReferralTree } from "./components/referral-tree";
 import { ReferredByBanner } from "./components/referred-by-banner";
+
+import { useGetReferralStats } from "@/hooks/api/use-referral-api";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function ReferralsPage() {
   const { isAuthenticated, isLoading } = useAuth();

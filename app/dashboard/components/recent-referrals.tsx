@@ -1,9 +1,9 @@
+import type { Referral } from "@/types/referral";
+
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
 import { useRouter } from "next/navigation";
-
-import type { Referral } from "@/types/referral";
 
 interface RecentReferralsProps {
   referrals: Referral[];
@@ -38,7 +38,8 @@ export function RecentReferrals({ referrals }: RecentReferralsProps) {
                 </Chip>
                 <div>
                   <p className="font-semibold">
-                    {referral.email || `${referral.walletAddress.slice(0, 6)}...${referral.walletAddress.slice(-4)}`}
+                    {referral.email ||
+                      `${referral.walletAddress.slice(0, 6)}...${referral.walletAddress.slice(-4)}`}
                   </p>
                   <p className="text-xs text-stable-gray">
                     Joined {new Date(referral.joinedAt).toLocaleDateString()}

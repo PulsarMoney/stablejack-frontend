@@ -10,21 +10,9 @@ interface PrivyProviderWrapperProps {
  * Privy authentication provider wrapper
  * Configures Privy with app settings and theme
  */
-export function PrivyProviderWrapper({
-  children,
-}: PrivyProviderWrapperProps) {
+export function PrivyProviderWrapper({ children }: PrivyProviderWrapperProps) {
   // Get Privy App ID directly from environment
   const privyAppId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
-
-  // Debug logging
-  if (typeof window !== "undefined") {
-    console.log("[PRIVY] Checking env vars:");
-    console.log("[PRIVY] NEXT_PUBLIC_PRIVY_APP_ID:", privyAppId);
-    console.log(
-      "[PRIVY] All NEXT_PUBLIC vars:",
-      Object.keys(process.env).filter((k) => k.startsWith("NEXT_PUBLIC"))
-    );
-  }
 
   // If no app ID, show error message instead of crashing
   if (!privyAppId) {

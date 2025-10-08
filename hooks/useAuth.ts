@@ -79,7 +79,7 @@ export const useAuth = () => {
       return null;
     },
 
-    signMessage: async (message: string) => {
+    signMessage: async (_message: string) => {
       // This would need wallet-specific implementation
       // For now, return empty string or implement based on wallet provider
       return "";

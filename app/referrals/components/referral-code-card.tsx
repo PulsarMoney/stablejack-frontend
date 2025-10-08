@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { Button } from "@heroui/button";
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Input } from "@heroui/input";
@@ -34,8 +33,8 @@ export function ReferralCodeCard() {
       await changeCodeMutation.mutateAsync({ newCode: newCode.trim() });
       setIsEditing(false);
       setNewCode("");
-    } catch (error) {
-      console.error("Failed to change code:", error);
+    } catch {
+      // Error handling - mutation already tracks error state
     }
   };
 

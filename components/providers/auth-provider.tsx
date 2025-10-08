@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
+
 import { useAuth } from "@/hooks/useAuth";
 import { apiClient } from "@/lib/axios";
 import { queryClient } from "@/lib/queryClient";
@@ -15,15 +16,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       try {
         // Get Privy access token
         if (token) {
-          console.log("[AUTH] Setting token", token.slice(0, 10));
           apiClient.defaults.headers["Authorization"] = `Bearer ${token}`;
         }
-      } catch (error) {
-        console.error("[AUTH] Failed to get access token:", error);
+      } catch {
+        // Error handling for token setting
       }
     } else {
       // Clear token from headers on logout
-      console.log("[AUTH] Clearing token");
       delete apiClient.defaults.headers["Authorization"];
     }
 
@@ -34,7 +33,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     queryClient.invalidateQueries({
       queryKey: [],
     });
-    console.log("[AUTH] Invalidating queries");
 
     // Clear all cache on logout for clean state
     if (!isAuthenticated) {

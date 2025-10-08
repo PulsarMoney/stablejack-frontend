@@ -1,3 +1,11 @@
+import type { ApiResponse } from "@/types/api";
+import type {
+  LeaderboardFilters,
+  PublicLeaderboardEntry,
+  TradingLeaderboardEntry,
+  UserRank,
+} from "@/types/leaderboard";
+
 import { useQuery } from "@tanstack/react-query";
 
 import { apiClient } from "@/lib/axios";
@@ -7,16 +15,8 @@ import {
   mockUserRank,
   simulateApiDelay,
 } from "@/lib/mock-data";
-import type { ApiResponse } from "@/types/api";
-import type {
-  LeaderboardFilters,
-  PublicLeaderboardEntry,
-  TradingLeaderboardEntry,
-  UserRank,
-} from "@/types/leaderboard";
 
-const USE_MOCK_DATA =
-  process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true" || false;
+const USE_MOCK_DATA = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true" || false;
 
 export const useGetTradingLeaderboard = (filters?: LeaderboardFilters) => {
   return useQuery({
@@ -82,7 +82,7 @@ export const useGetUserRank = () => {
       }
 
       const response = await apiClient.get<ApiResponse<UserRank>>(
-        "/api/leaderboard/user-rank"
+        "/api/leaderboard/user-rank",
       );
 
       return response.data.data;

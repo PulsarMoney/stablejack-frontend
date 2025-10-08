@@ -19,63 +19,24 @@ export const apiClient = axios.create({
  */
 apiClient.interceptors.request.use(
   (config) => {
-    // Log requests in development
-    if (process.env.NODE_ENV === "development") {
-      console.log(`[API] ${config.method?.toUpperCase()} ${config.url}`);
-    }
-
     return config;
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 /**
  * Response interceptor
- * Handles common error cases and logging
+ * Handles common error cases
  */
 apiClient.interceptors.response.use(
   (response) => {
-    // Log successful responses in development
-    if (process.env.NODE_ENV === "development") {
-      console.log(
-        `[API] ${response.config.method?.toUpperCase()} ${response.config.url} - ${response.status}`
-      );
-    }
-
     return response;
   },
   (error) => {
-    // Handle common HTTP errors
-    if (error.response) {
-      const { status, data } = error.response;
-
-      switch (status) {
-        case 401:
-          console.error("[API] Unauthorized - Invalid or expired token");
-          // Could trigger logout here if needed
-          break;
-        case 403:
-          console.error("[API] Forbidden - Insufficient permissions");
-          break;
-        case 404:
-          console.error("[API] Not found");
-          break;
-        case 500:
-          console.error("[API] Server error");
-          break;
-        default:
-          console.error(`[API] Error ${status}:`, data);
-      }
-    } else if (error.request) {
-      // Request made but no response received
-      console.error("[API] No response received from server");
-    } else {
-      // Error in request configuration
-      console.error("[API] Request error:", error.message);
-    }
-
+    // Handle common HTTP errors silently in production
+    // Error state is managed by React Query
     return Promise.reject(error);
-  }
+  },
 );

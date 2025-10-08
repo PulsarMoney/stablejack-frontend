@@ -1,3 +1,5 @@
+import type { PublicLeaderboardEntry } from "@/types/leaderboard";
+
 import {
   Table,
   TableHeader,
@@ -7,8 +9,6 @@ import {
   TableCell,
 } from "@heroui/table";
 import { Chip } from "@heroui/chip";
-
-import type { PublicLeaderboardEntry } from "@/types/leaderboard";
 
 interface PublicXPTableProps {
   data: PublicLeaderboardEntry[];

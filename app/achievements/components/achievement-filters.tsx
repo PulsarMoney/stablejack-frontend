@@ -1,6 +1,6 @@
-import { Tabs, Tab } from "@heroui/tabs";
-
 import type { AchievementFilters } from "@/types/achievement";
+
+import { Tabs, Tab } from "@heroui/tabs";
 
 interface AchievementFiltersProps {
   filters: AchievementFilters;
@@ -18,7 +18,10 @@ export function AchievementFiltersComponent({
         color="primary"
         selectedKey={filters.status || "all"}
         onSelectionChange={(key) =>
-          onFiltersChange({ ...filters, status: key as AchievementFilters["status"] })
+          onFiltersChange({
+            ...filters,
+            status: key as AchievementFilters["status"],
+          })
         }
       >
         <Tab key="all" title="All" />

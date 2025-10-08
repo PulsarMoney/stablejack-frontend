@@ -33,10 +33,10 @@ export function AchievementStatsCard({
           <div>
             <p className="text-sm text-stable-gray mb-2">Completion Rate</p>
             <Progress
+              aria-label="Completion rate"
               color="success"
               size="md"
               value={completionRate || 0}
-              aria-label="Completion rate"
             />
             <p className="text-sm font-semibold text-burgundy mt-1">
               {completionRate?.toFixed(1) || 0}%

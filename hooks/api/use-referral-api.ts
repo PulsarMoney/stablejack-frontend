@@ -1,3 +1,6 @@
+import type { ApiResponse } from "@/types/api";
+import type { ReferralCode, ReferralStats } from "@/types/referral";
+
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { apiClient } from "@/lib/axios";
@@ -7,11 +10,8 @@ import {
   simulateApiDelay,
 } from "@/lib/mock-data";
 import { queryClient } from "@/lib/queryClient";
-import type { ApiResponse } from "@/types/api";
-import type { ReferralCode, ReferralStats } from "@/types/referral";
 
-const USE_MOCK_DATA =
-  process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true" || false;
+const USE_MOCK_DATA = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true" || false;
 
 interface ChangeCodeData {
   newCode: string;
@@ -31,9 +31,8 @@ export const useGetReferralCode = () => {
         return mockReferralCode;
       }
 
-      const response = await apiClient.get<ApiResponse<ReferralCode>>(
-        "/api/referral/code"
-      );
+      const response =
+        await apiClient.get<ApiResponse<ReferralCode>>("/api/referral/code");
 
       return response.data.data;
     },
@@ -57,7 +56,7 @@ export const useChangeReferralCode = () => {
 
       const response = await apiClient.put<ApiResponse<ReferralCode>>(
         "/api/referral/code",
-        data
+        data,
       );
 
       return response.data;
@@ -84,7 +83,7 @@ export const useApplyReferralCode = () => {
 
       const response = await apiClient.post<ApiResponse<{ message: string }>>(
         "/api/referral/apply",
-        data
+        data,
       );
 
       return response.data;
@@ -106,7 +105,7 @@ export const useGetReferralStats = () => {
       }
 
       const response = await apiClient.get<ApiResponse<ReferralStats>>(
-        "/api/referral/stats"
+        "/api/referral/stats",
       );
 
       return response.data.data;

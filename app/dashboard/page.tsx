@@ -3,13 +3,13 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from "@/hooks/useAuth";
-import { useGetReferralStats } from "@/hooks/api/use-referral-api";
-
 import { EmptyState } from "./components/empty-state";
 import { QuickActions } from "./components/quick-actions";
 import { RecentReferrals } from "./components/recent-referrals";
 import { StatsOverview } from "./components/stats-overview";
+
+import { useGetReferralStats } from "@/hooks/api/use-referral-api";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function DashboardPage() {
   const { isAuthenticated, isLoading, address, email } = useAuth();

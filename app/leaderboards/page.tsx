@@ -2,26 +2,25 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
 import { Card, CardBody } from "@heroui/card";
-
-import { useAuth } from "@/hooks/useAuth";
-import {
-  useGetPublicLeaderboard,
-  useGetTradingLeaderboard,
-  useGetUserRank,
-} from "@/hooks/api/use-leaderboard-api";
 
 import { LeaderboardTabs } from "./components/leaderboard-tabs";
 import { PublicXPTable } from "./components/public-xp-table";
 import { TradingVolumeTable } from "./components/trading-volume-table";
 import { UserPositionCard } from "./components/user-position-card";
 
+import {
+  useGetPublicLeaderboard,
+  useGetTradingLeaderboard,
+  useGetUserRank,
+} from "@/hooks/api/use-leaderboard-api";
+import { useAuth } from "@/hooks/useAuth";
+
 export default function LeaderboardsPage() {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const [selectedTab, setSelectedTab] = useState<"trading" | "public">(
-    "trading"
+    "trading",
   );
 
   const { data: tradingData, isLoading: tradingLoading } =
@@ -68,7 +67,9 @@ export default function LeaderboardsPage() {
         {/* Tabs */}
         <LeaderboardTabs
           selected={selectedTab}
-          onSelectionChange={(key) => setSelectedTab(key as "trading" | "public")}
+          onSelectionChange={(key) =>
+            setSelectedTab(key as "trading" | "public")
+          }
         />
 
         {/* Tables */}

@@ -221,7 +221,7 @@ export const mockAchievementStats: AchievementStats = {
 
 // Helper functions for filtering
 export const getAchievementsByStatus = (
-  status: AchievementStatus | "all"
+  status: AchievementStatus | "all",
 ): Achievement[] => {
   if (status === "all") return mockAchievements;
 
@@ -229,7 +229,7 @@ export const getAchievementsByStatus = (
 };
 
 export const getAchievementsByCategory = (
-  category: AchievementCategory | "all"
+  category: AchievementCategory | "all",
 ): Achievement[] => {
   if (category === "all") return mockAchievements;
 

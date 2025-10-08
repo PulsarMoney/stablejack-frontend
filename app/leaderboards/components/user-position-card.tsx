@@ -1,7 +1,7 @@
+import type { UserRank } from "@/types/leaderboard";
+
 import { Card, CardBody } from "@heroui/card";
 import { Chip } from "@heroui/chip";
-
-import type { UserRank } from "@/types/leaderboard";
 
 interface UserPositionCardProps {
   userRank: UserRank;
@@ -18,8 +18,7 @@ export function UserPositionCard({
 
   const rank =
     selectedTab === "trading" ? userRank.tradingRank : userRank.publicRank;
-  const xp =
-    selectedTab === "trading" ? userRank.tradingXP : userRank.totalXP;
+  const xp = selectedTab === "trading" ? userRank.tradingXP : userRank.totalXP;
 
   return (
     <Card className="border-2 border-burgundy bg-burgundy/5">

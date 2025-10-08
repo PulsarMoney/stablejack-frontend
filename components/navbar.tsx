@@ -16,6 +16,7 @@ import { Input } from "@heroui/input";
 import { link as linkStyles } from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
+import Image from "next/image";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -26,7 +27,6 @@ import {
   SearchIcon,
 } from "@/components/icons";
 import { useAuth } from "@/hooks/useAuth";
-import Image from "next/image";
 
 export const Navbar = () => {
   const { isAuthenticated, isLoading, address, email, login, logout } =

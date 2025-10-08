@@ -1,8 +1,8 @@
+import type { Achievement } from "@/types/achievement";
+
 import { Card, CardBody } from "@heroui/card";
 import { Chip } from "@heroui/chip";
 import { Progress } from "@heroui/progress";
-
-import type { Achievement } from "@/types/achievement";
 
 interface AchievementCardProps {
   achievement: Achievement;
@@ -73,10 +73,10 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
               </span>
             </div>
             <Progress
+              aria-label="Achievement progress"
               color="primary"
               size="sm"
               value={progressPercentage}
-              aria-label="Achievement progress"
             />
           </div>
         )}

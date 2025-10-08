@@ -1,7 +1,7 @@
+import type { Referral } from "@/types/referral";
+
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Chip } from "@heroui/chip";
-
-import type { Referral } from "@/types/referral";
 
 interface ReferralTreeProps {
   referrals: Referral[];

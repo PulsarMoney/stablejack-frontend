@@ -1,18 +1,17 @@
+import type { ApiResponse } from "@/types/api";
+import type { Achievement, AchievementFilters } from "@/types/achievement";
+
 import { useQuery } from "@tanstack/react-query";
 
 import { apiClient } from "@/lib/axios";
 import {
   getAchievementById,
-  getAchievementsByCategory,
   getAchievementsByStatus,
   mockAchievementStats,
   simulateApiDelay,
 } from "@/lib/mock-data";
-import type { ApiResponse } from "@/types/api";
-import type { Achievement, AchievementFilters } from "@/types/achievement";
 
-const USE_MOCK_DATA =
-  process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true" || false;
+const USE_MOCK_DATA = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true" || false;
 
 export const useGetAchievements = (filters?: AchievementFilters) => {
   return useQuery({
@@ -31,7 +30,7 @@ export const useGetAchievements = (filters?: AchievementFilters) => {
         // Apply category filter
         if (filters?.category && filters.category !== "all") {
           achievements = achievements.filter(
-            (a) => a.category === filters.category
+            (a) => a.category === filters.category,
           );
         }
 
@@ -73,7 +72,7 @@ export const useGetAchievementProgress = (achievementId: string) => {
       }
 
       const response = await apiClient.get<ApiResponse<Achievement>>(
-        `/api/achievements/${achievementId}/progress`
+        `/api/achievements/${achievementId}/progress`,
       );
 
       return response.data.data;

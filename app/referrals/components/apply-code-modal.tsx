@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import {
@@ -28,8 +27,8 @@ export function ApplyCodeModal({ isOpen, onClose }: ApplyCodeModalProps) {
       await applyCodeMutation.mutateAsync({ code: code.trim() });
       setCode("");
       onClose();
-    } catch (error) {
-      console.error("Failed to apply code:", error);
+    } catch {
+      // Error handling - mutation already tracks error state
     }
   };
 
@@ -43,7 +42,6 @@ export function ApplyCodeModal({ isOpen, onClose }: ApplyCodeModalProps) {
             </ModalHeader>
             <ModalBody>
               <Input
-                autoFocus
                 label="Referral Code"
                 placeholder="Enter referral code"
                 value={code}

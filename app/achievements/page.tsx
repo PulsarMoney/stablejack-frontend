@@ -1,18 +1,19 @@
 "use client";
 
+import type { AchievementFilters } from "@/types/achievement";
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-import { useAuth } from "@/hooks/useAuth";
-import {
-  useGetAchievements,
-  useGetAchievementStats,
-} from "@/hooks/api/use-achievements-api";
-import type { AchievementFilters } from "@/types/achievement";
 
 import { AchievementCard } from "./components/achievement-card";
 import { AchievementFiltersComponent } from "./components/achievement-filters";
 import { AchievementStatsCard } from "./components/achievement-stats-card";
+
+import {
+  useGetAchievements,
+  useGetAchievementStats,
+} from "@/hooks/api/use-achievements-api";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function AchievementsPage() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -75,10 +76,7 @@ export default function AchievementsPage() {
         {achievements && achievements.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {achievements.map((achievement) => (
-              <AchievementCard
-                key={achievement.id}
-                achievement={achievement}
-              />
+              <AchievementCard key={achievement.id} achievement={achievement} />
             ))}
           </div>
         ) : (
