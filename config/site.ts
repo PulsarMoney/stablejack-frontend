@@ -2,33 +2,41 @@ export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
   name: "Stable Jack",
-  description: "DeFi yield aggregator platform with friendly, approachable design.",
+  description: "Referral & Rewards platform for traders.",
   navItems: [
     {
-      label: "Markets",
-      href: "/",
+      label: "Dashboard",
+      href: "/dashboard",
     },
     {
-      label: "JACK",
-      href: "/jack",
+      label: "Referrals",
+      href: "/referrals",
+    },
+    {
+      label: "Leaderboards",
+      href: "/leaderboards",
+    },
+    {
+      label: "Achievements",
+      href: "/achievements",
     },
   ],
   navMenuItems: [
     {
-      label: "Markets",
-      href: "/",
+      label: "Dashboard",
+      href: "/dashboard",
     },
     {
-      label: "Stake",
-      href: "/jack/stake",
+      label: "Referrals",
+      href: "/referrals",
     },
     {
-      label: "Bridge",
-      href: "/jack/bridge",
+      label: "Leaderboards",
+      href: "/leaderboards",
     },
     {
-      label: "Settings",
-      href: "/settings",
+      label: "Achievements",
+      href: "/achievements",
     },
   ],
   links: {
