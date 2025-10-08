@@ -27,7 +27,11 @@ export interface LeaderboardFilters {
 
 export interface UserRank {
   tradingRank: number;
+  tradingVolume: number;
   tradingXP: number;
   publicRank: number;
-  publicXP: number;
+  totalXP: number;
+  tradingXPBreakdown: number;
+  referralXPBreakdown: number;
+  achievementXPBreakdown: number;
 }
