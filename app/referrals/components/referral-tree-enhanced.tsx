@@ -1,18 +1,21 @@
 "use client";
 
-import type { Referral, ReferralSortBy, ReferralSortOrder } from "@/types/referral";
+import type {
+  Referral,
+  ReferralSortBy,
+  ReferralSortOrder,
+} from "@/types/referral";
 
-import { useState, useMemo } from "react";
-
+import { useMemo, useState } from "react";
 import { Button } from "@heroui/button";
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Chip } from "@heroui/chip";
 import { Input } from "@heroui/input";
 import { Select, SelectItem } from "@heroui/select";
 
-import { groupTier2ByParent } from "@/lib/mock-data/mock-referral-data";
-
 import { ReferralListItem } from "./referral-list-item";
+
+import { groupTier2ByParent } from "@/lib/mock-data/mock-referral-data";
 
 interface ReferralTreeEnhancedProps {
   referrals: Referral[];
@@ -31,7 +34,7 @@ export function ReferralTreeEnhanced({
   // Group tier2 referrals by their parent
   const tier2ByParent = useMemo(
     () => groupTier2ByParent(referrals),
-    [referrals]
+    [referrals],
   );
 
   // Get tier1 referrals and enrich with tier2 data
@@ -44,10 +47,13 @@ export function ReferralTreeEnhanced({
         return {
           ...tier1,
           tier2Count: tier2Children.length,
-          tier2TotalVolume: tier2Children.reduce((sum, t2) => sum + t2.volume, 0),
+          tier2TotalVolume: tier2Children.reduce(
+            (sum, t2) => sum + t2.volume,
+            0,
+          ),
           tier2TotalEarnings: tier2Children.reduce(
             (sum, t2) => sum + t2.earnings,
-            0
+            0,
           ),
         };
       });
@@ -64,7 +70,7 @@ export function ReferralTreeEnhanced({
       filtered = filtered.filter(
         (r) =>
           r.email?.toLowerCase().includes(query) ||
-          r.walletAddress.toLowerCase().includes(query)
+          r.walletAddress.toLowerCase().includes(query),
       );
     }
 
@@ -230,7 +236,18 @@ export function ReferralTreeEnhanced({
                       className={`flex items-start justify-between ${
                         onReferralClick ? "cursor-pointer" : ""
                       }`}
+                      role={onReferralClick ? "button" : undefined}
+                      tabIndex={onReferralClick ? 0 : undefined}
                       onClick={() => onReferralClick?.(tier1)}
+                      onKeyDown={(e) => {
+                        if (
+                          onReferralClick &&
+                          (e.key === "Enter" || e.key === " ")
+                        ) {
+                          e.preventDefault();
+                          onReferralClick(tier1);
+                        }
+                      }}
                     >
                       <div className="flex items-center gap-4 flex-1">
                         {/* Avatar */}
@@ -270,7 +287,7 @@ export function ReferralTreeEnhanced({
                                 <span>
                                   Last trade:{" "}
                                   {new Date(
-                                    tier1.lastTradeDate
+                                    tier1.lastTradeDate,
                                   ).toLocaleDateString()}
                                 </span>
                               </>
@@ -363,7 +380,8 @@ export function ReferralTreeEnhanced({
                         Tier 2 Referrals ({tier2Children.length})
                       </Chip>
                       <span className="text-xs text-stable-gray">
-                        Total Volume: ${tier1.tier2TotalVolume.toLocaleString()} • Earnings: $
+                        Total Volume: ${tier1.tier2TotalVolume.toLocaleString()}
+                        {" • Earnings: $"}
                         {tier1.tier2TotalEarnings.toFixed(2)}
                       </span>
                     </div>

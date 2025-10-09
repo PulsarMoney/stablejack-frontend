@@ -67,12 +67,13 @@ export function ReferralStatsGrid({ stats }: ReferralStatsGridProps) {
           <p className="text-3xl font-bold text-burgundy mb-1">
             {stats.activeReferrals || 0}
           </p>
-          <p className="text-xs text-stable-gray">
-            Traded in last 30 days
-          </p>
+          <p className="text-xs text-stable-gray">Traded in last 30 days</p>
           {stats.activeReferrals && stats.totalReferrals && (
             <Chip color="success" size="sm" variant="flat">
-              {((stats.activeReferrals / stats.totalReferrals) * 100).toFixed(0)}% active
+              {((stats.activeReferrals / stats.totalReferrals) * 100).toFixed(
+                0,
+              )}
+              % active
             </Chip>
           )}
         </CardBody>

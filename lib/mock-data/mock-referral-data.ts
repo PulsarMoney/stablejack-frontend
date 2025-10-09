@@ -257,7 +257,7 @@ export const mockReferredBy: ReferredBy = {
 
 // Helper function to group tier2 referrals by their tier1 parent
 export const groupTier2ByParent = (
-  referrals: Referral[]
+  referrals: Referral[],
 ): Map<string, Referral[]> => {
   const tier2ByParent = new Map<string, Referral[]>();
 

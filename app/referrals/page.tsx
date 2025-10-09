@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import type { Referral } from "@/types/referral";
+
 import { Button } from "@heroui/button";
 import { useDisclosure } from "@heroui/modal";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { ApplyCodeModal } from "./components/apply-code-modal";
 import { ReferralCodeCard } from "./components/referral-code-card";
@@ -16,14 +18,12 @@ import { ReferredByBanner } from "./components/referred-by-banner";
 import { useGetReferralStats } from "@/hooks/api/use-referral-api";
 import { useAuth } from "@/hooks/useAuth";
 
-import type { Referral } from "@/types/referral";
-
 export default function ReferralsPage() {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedReferral, setSelectedReferral] = useState<Referral | null>(
-    null
+    null,
   );
 
   const { data: referralStats, isLoading: statsLoading } =
@@ -104,7 +104,7 @@ export default function ReferralsPage() {
         tier2Count={
           selectedReferral?.tier === 1
             ? referralStats?.referrals.filter(
-                (r) => r.tier === 2 && r.parentId === selectedReferral.userId
+                (r) => r.tier === 2 && r.parentId === selectedReferral.userId,
               ).length || 0
             : 0
         }
