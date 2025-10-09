@@ -185,21 +185,11 @@ export function ReferralTreeEnhanced({
             size="sm"
             onChange={(e) => setSortBy(e.target.value as ReferralSortBy)}
           >
-            <SelectItem key="volume" value="volume">
-              Volume
-            </SelectItem>
-            <SelectItem key="earnings" value="earnings">
-              Earnings
-            </SelectItem>
-            <SelectItem key="date" value="date">
-              Date Joined
-            </SelectItem>
-            <SelectItem key="tier2Count" value="tier2Count">
-              Tier 2 Count
-            </SelectItem>
-            <SelectItem key="active" value="active">
-              Activity
-            </SelectItem>
+            <SelectItem key="volume">Volume</SelectItem>
+            <SelectItem key="earnings">Earnings</SelectItem>
+            <SelectItem key="date">Date Joined</SelectItem>
+            <SelectItem key="tier2Count">Tier 2 Count</SelectItem>
+            <SelectItem key="active">Activity</SelectItem>
           </Select>
 
           <Select
@@ -209,12 +199,8 @@ export function ReferralTreeEnhanced({
             size="sm"
             onChange={(e) => setSortOrder(e.target.value as ReferralSortOrder)}
           >
-            <SelectItem key="desc" value="desc">
-              Descending
-            </SelectItem>
-            <SelectItem key="asc" value="asc">
-              Ascending
-            </SelectItem>
+            <SelectItem key="desc">Descending</SelectItem>
+            <SelectItem key="asc">Ascending</SelectItem>
           </Select>
         </div>
 
