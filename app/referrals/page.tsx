@@ -1,23 +1,30 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@heroui/button";
 import { useDisclosure } from "@heroui/modal";
 
 import { ApplyCodeModal } from "./components/apply-code-modal";
 import { ReferralCodeCard } from "./components/referral-code-card";
+import { ReferralDetailModal } from "./components/referral-detail-modal";
 import { ReferralStatsGrid } from "./components/referral-stats-grid";
-import { ReferralTree } from "./components/referral-tree";
+import { ReferralTimeMetrics } from "./components/referral-time-metrics";
+import { ReferralTreeEnhanced } from "./components/referral-tree-enhanced";
 import { ReferredByBanner } from "./components/referred-by-banner";
 
 import { useGetReferralStats } from "@/hooks/api/use-referral-api";
 import { useAuth } from "@/hooks/useAuth";
 
+import type { Referral } from "@/types/referral";
+
 export default function ReferralsPage() {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedReferral, setSelectedReferral] = useState<Referral | null>(
+    null
+  );
 
   const { data: referralStats, isLoading: statsLoading } =
     useGetReferralStats();
@@ -70,14 +77,39 @@ export default function ReferralsPage() {
         {/* Stats Grid */}
         {referralStats && <ReferralStatsGrid stats={referralStats} />}
 
-        {/* Referral Tree */}
+        {/* Time-based Metrics */}
+        {referralStats?.volumeMetrics && referralStats?.feeMetrics && (
+          <ReferralTimeMetrics
+            feeMetrics={referralStats.feeMetrics}
+            volumeMetrics={referralStats.volumeMetrics}
+          />
+        )}
+
+        {/* Enhanced Referral Tree */}
         {referralStats?.referrals && (
-          <ReferralTree referrals={referralStats.referrals} />
+          <ReferralTreeEnhanced
+            referrals={referralStats.referrals}
+            onReferralClick={setSelectedReferral}
+          />
         )}
       </div>
 
       {/* Apply Code Modal */}
       <ApplyCodeModal isOpen={isOpen} onClose={onClose} />
+
+      {/* Referral Detail Modal */}
+      <ReferralDetailModal
+        isOpen={!!selectedReferral}
+        referral={selectedReferral}
+        tier2Count={
+          selectedReferral?.tier === 1
+            ? referralStats?.referrals.filter(
+                (r) => r.tier === 2 && r.parentId === selectedReferral.userId
+              ).length || 0
+            : 0
+        }
+        onClose={() => setSelectedReferral(null)}
+      />
     </section>
   );
 }
