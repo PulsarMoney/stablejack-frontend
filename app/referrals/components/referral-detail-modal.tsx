@@ -33,7 +33,7 @@ export function ReferralDetailModal({
   return (
     <Modal isOpen={isOpen} size="2xl" onClose={onClose}>
       <ModalContent>
-        {(onClose) => (
+        {() => (
           <>
             <ModalHeader className="flex flex-col gap-1">
               <div className="flex items-center gap-3">
@@ -97,7 +97,9 @@ export function ReferralDetailModal({
                       <div>
                         <p className="text-xs text-stable-gray">Last Trade</p>
                         <p className="text-sm">
-                          {new Date(referral.lastTradeDate).toLocaleDateString()}
+                          {new Date(
+                            referral.lastTradeDate,
+                          ).toLocaleDateString()}
                         </p>
                       </div>
                     )}

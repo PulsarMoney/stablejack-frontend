@@ -27,7 +27,15 @@ export function ReferralListItem({
           ? "bg-beige/50 border-burgundy/10 hover:border-burgundy/30"
           : "bg-beige/30 border-burgundy/5 hover:border-burgundy/20"
       } ${onDetailClick ? "cursor-pointer" : ""}`}
+      role={onDetailClick ? "button" : undefined}
+      tabIndex={onDetailClick ? 0 : undefined}
       onClick={() => onDetailClick?.(referral)}
+      onKeyDown={(e) => {
+        if (onDetailClick && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          onDetailClick(referral);
+        }
+      }}
     >
       <div className="flex items-center gap-4 flex-1">
         {/* Avatar */}
@@ -54,13 +62,18 @@ export function ReferralListItem({
             )}
           </div>
           <div className="flex items-center gap-3 text-xs text-stable-gray">
-            <span>Joined {new Date(referral.joinedAt).toLocaleDateString()}</span>
+            <span>
+              Joined {new Date(referral.joinedAt).toLocaleDateString()}
+            </span>
             <span>•</span>
             <span>Tier {referral.tier}</span>
             {referral.lastTradeDate && (
               <>
                 <span>•</span>
-                <span>Last trade: {new Date(referral.lastTradeDate).toLocaleDateString()}</span>
+                <span>
+                  Last trade:{" "}
+                  {new Date(referral.lastTradeDate).toLocaleDateString()}
+                </span>
               </>
             )}
           </div>
