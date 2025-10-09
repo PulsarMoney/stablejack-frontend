@@ -4,9 +4,14 @@ export interface TradingLeaderboardEntry {
   email?: string;
   walletAddress: string;
   volume: number;
+  dailyVolume?: number;
+  weeklyVolume?: number;
+  monthlyVolume?: number;
   xp: number;
   isCurrentUser?: boolean;
 }
+
+export type TimeRange = "daily" | "weekly" | "monthly" | "all-time";
 
 export interface PublicLeaderboardEntry {
   rank: number;

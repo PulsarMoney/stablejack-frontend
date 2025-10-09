@@ -29,7 +29,9 @@ export function PublicXPTable({ data }: PublicXPTableProps) {
         <TableColumn>RANK</TableColumn>
         <TableColumn>USER</TableColumn>
         <TableColumn>TOTAL XP</TableColumn>
-        <TableColumn>BREAKDOWN</TableColumn>
+        <TableColumn>TRADING</TableColumn>
+        <TableColumn>REFERRALS</TableColumn>
+        <TableColumn>TASKS</TableColumn>
       </TableHeader>
       <TableBody>
         {data.map((entry) => (
@@ -63,17 +65,19 @@ export function PublicXPTable({ data }: PublicXPTableProps) {
               </span>
             </TableCell>
             <TableCell>
-              <div className="flex gap-1 flex-wrap">
-                <Chip color="primary" size="sm" variant="flat">
-                  Trading: {entry.tradingXP.toLocaleString()}
-                </Chip>
-                <Chip color="secondary" size="sm" variant="flat">
-                  Referrals: {entry.referralXP.toLocaleString()}
-                </Chip>
-                <Chip color="success" size="sm" variant="flat">
-                  Tasks: {entry.achievementXP.toLocaleString()}
-                </Chip>
-              </div>
+              <span className="font-semibold text-primary">
+                {entry.tradingXP.toLocaleString()}
+              </span>
+            </TableCell>
+            <TableCell>
+              <span className="font-semibold text-secondary">
+                {entry.referralXP.toLocaleString()}
+              </span>
+            </TableCell>
+            <TableCell>
+              <span className="font-semibold text-success">
+                {entry.achievementXP.toLocaleString()}
+              </span>
             </TableCell>
           </TableRow>
         ))}
