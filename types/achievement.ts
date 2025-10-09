@@ -24,6 +24,14 @@ export interface Achievement {
 }
 
 export interface AchievementFilters {
-  status?: "all" | "completed" | "in-progress" | "locked";
-  category?: AchievementCategory;
+  status?: "all" | AchievementStatus;
+  category?: "all" | AchievementCategory;
+}
+
+export interface AchievementStats {
+  totalCompleted: number;
+  totalInProgress: number;
+  totalLocked: number;
+  totalXpEarned: number;
+  completionRate: number;
 }
