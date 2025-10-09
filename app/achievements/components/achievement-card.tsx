@@ -1,5 +1,23 @@
 import type { Achievement } from "@/types/achievement";
 
+import {
+  Award,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  Crown,
+  Flame,
+  Globe,
+  Lock,
+  Medal,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Trophy,
+  UserPlus,
+  Users,
+  Zap,
+} from "lucide-react";
 import { Card, CardBody } from "@heroui/card";
 import { Chip } from "@heroui/chip";
 import { Progress } from "@heroui/progress";
@@ -23,11 +41,59 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
   const getStatusIcon = () => {
     switch (achievement.status) {
       case "completed":
-        return "✓";
+        return <CheckCircle2 className="w-8 h-8 text-success" />;
       case "in-progress":
-        return "⏳";
+        return <Clock className="w-8 h-8 text-primary" />;
       default:
-        return "🔒";
+        return <Lock className="w-8 h-8 text-default-400" />;
+    }
+  };
+
+  // Map emoji icons to Lucide icons
+  const getAchievementIcon = () => {
+    const iconColor =
+      achievement.status === "completed"
+        ? "text-success"
+        : achievement.status === "in-progress"
+          ? "text-burgundy"
+          : "text-default-400";
+    const iconSize = "w-8 h-8";
+
+    // Map emojis to Lucide icons based on achievement type
+    switch (achievement.icon) {
+      case "🎯":
+        return <Target className={`${iconSize} ${iconColor}`} />;
+      case "💰":
+        return <TrendingUp className={`${iconSize} ${iconColor}`} />;
+      case "📅":
+      case "📆":
+        return <Calendar className={`${iconSize} ${iconColor}`} />;
+      case "👥":
+        return <Users className={`${iconSize} ${iconColor}`} />;
+      case "🐦":
+        return <Zap className={`${iconSize} ${iconColor}`} />;
+      case "💎":
+        return <Sparkles className={`${iconSize} ${iconColor}`} />;
+      case "⚔️":
+        return <Zap className={`${iconSize} ${iconColor}`} />;
+      case "🏆":
+        return <Trophy className={`${iconSize} ${iconColor}`} />;
+      case "🔥":
+        return <Flame className={`${iconSize} ${iconColor}`} />;
+      case "🌐":
+        return <Globe className={`${iconSize} ${iconColor}`} />;
+      case "👑":
+        return <Crown className={`${iconSize} ${iconColor}`} />;
+      case "🎖️":
+        return <Medal className={`${iconSize} ${iconColor}`} />;
+      case "✨":
+        return <Sparkles className={`${iconSize} ${iconColor}`} />;
+      case "🏛️":
+        return <Award className={`${iconSize} ${iconColor}`} />;
+      case "🐋":
+        return <TrendingUp className={`${iconSize} ${iconColor}`} />;
+      default:
+        return <UserPlus className={`${iconSize} ${iconColor}`} />;
     }
   };
 
@@ -47,7 +113,9 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
     >
       <CardBody className="p-6">
         <div className="flex items-start justify-between mb-3">
-          <div className="text-3xl">{achievement.icon || getStatusIcon()}</div>
+          <div className="p-2 rounded-lg bg-burgundy/10">
+            {achievement.icon ? getAchievementIcon() : getStatusIcon()}
+          </div>
           <Chip color={getStatusColor()} size="sm" variant="flat">
             {achievement.status === "completed"
               ? "Completed"
