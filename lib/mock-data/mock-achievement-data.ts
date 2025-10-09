@@ -215,7 +215,7 @@ export const mockAchievementStats: AchievementStats = {
   totalCompleted: 5,
   totalInProgress: 5,
   totalLocked: 6,
-  totalXpEarned: 1200,
+  totalXPEarned: 1200,
   completionRate: 31.25, // 5 out of 16 total
 };
 

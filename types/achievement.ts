@@ -32,6 +32,6 @@ export interface AchievementStats {
   totalCompleted: number;
   totalInProgress: number;
   totalLocked: number;
-  totalXpEarned: number;
+  totalXPEarned: number;
   completionRate: number;
 }
