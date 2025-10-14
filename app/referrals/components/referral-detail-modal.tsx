@@ -30,12 +30,12 @@ export function ReferralDetailModal({
 
   const displayName =
     referral.email ||
-    `${referral.walletAddress.slice(0, 6)}...${referral.walletAddress.slice(-4)}`;
+    `${referral.userId.slice(0, 8)}...${referral.userId.slice(-6)}`;
 
   const activityColor = referral.isActive ? "success" : "default";
 
-  const copyAddress = () => {
-    navigator.clipboard.writeText(referral.walletAddress);
+  const copyUserId = () => {
+    navigator.clipboard.writeText(referral.userId);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -55,7 +55,7 @@ export function ReferralDetailModal({
                   <span className="text-burgundy font-bold text-lg">
                     {referral.email
                       ? referral.email.charAt(0).toUpperCase()
-                      : referral.walletAddress.slice(2, 3).toUpperCase()}
+                      : referral.userId.slice(0, 2).toUpperCase()}
                   </span>
                 </div>
                 <div>
@@ -86,19 +86,18 @@ export function ReferralDetailModal({
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <p className="text-xs text-stable-gray mb-1">
-                        Wallet Address
+                        User ID
                       </p>
                       <div className="flex items-center gap-2">
-                        <p className="font-mono text-sm">
-                          {referral.walletAddress.slice(0, 10)}...
-                          {referral.walletAddress.slice(-8)}
+                        <p className="font-mono text-sm break-all">
+                          {referral.userId}
                         </p>
                         <Button
                           isIconOnly
                           color="primary"
                           size="sm"
                           variant="light"
-                          onPress={copyAddress}
+                          onPress={copyUserId}
                         >
                           {copied ? "✓" : "📋"}
                         </Button>

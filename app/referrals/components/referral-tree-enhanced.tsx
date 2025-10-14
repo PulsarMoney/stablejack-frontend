@@ -70,7 +70,7 @@ export function ReferralTreeEnhanced({
       filtered = filtered.filter(
         (r) =>
           r.email?.toLowerCase().includes(query) ||
-          r.walletAddress.toLowerCase().includes(query),
+          r.userId.toLowerCase().includes(query),
       );
     }
 
@@ -171,7 +171,7 @@ export function ReferralTreeEnhanced({
         <div className="flex gap-4 mb-6">
           <Input
             className="max-w-xs"
-            placeholder="Search by email or wallet..."
+            placeholder="Search by email or user ID..."
             size="sm"
             type="text"
             value={searchQuery}

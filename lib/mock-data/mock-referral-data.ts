@@ -58,7 +58,6 @@ const mockReferralsData: Referral[] = [
     ytdVolume: 15000,
     feeVolume: 1500,
     isActive: true,
-    lastTradeDate: "2025-10-08T10:30:00Z",
   },
   {
     userId: "user-002",
@@ -73,7 +72,6 @@ const mockReferralsData: Referral[] = [
     ytdVolume: 22000,
     feeVolume: 2200,
     isActive: true,
-    lastTradeDate: "2025-10-09T14:20:00Z",
   },
   {
     userId: "user-003",
@@ -87,7 +85,6 @@ const mockReferralsData: Referral[] = [
     ytdVolume: 18500,
     feeVolume: 1850,
     isActive: true,
-    lastTradeDate: "2025-10-07T09:15:00Z",
   },
   {
     userId: "user-004",
@@ -102,7 +99,6 @@ const mockReferralsData: Referral[] = [
     ytdVolume: 12000,
     feeVolume: 1200,
     isActive: false,
-    lastTradeDate: "2025-09-15T16:30:00Z",
   },
   {
     userId: "user-005",
@@ -116,7 +112,6 @@ const mockReferralsData: Referral[] = [
     ytdVolume: 8500,
     feeVolume: 850,
     isActive: false,
-    lastTradeDate: "2025-08-20T11:00:00Z",
   },
   {
     userId: "user-006",
@@ -131,7 +126,6 @@ const mockReferralsData: Referral[] = [
     ytdVolume: 5000,
     feeVolume: 500,
     isActive: true,
-    lastTradeDate: "2025-10-08T18:45:00Z",
   },
   {
     userId: "user-007",
@@ -145,7 +139,6 @@ const mockReferralsData: Referral[] = [
     ytdVolume: 3000,
     feeVolume: 300,
     isActive: true,
-    lastTradeDate: "2025-10-06T12:00:00Z",
   },
   {
     userId: "user-008",
@@ -160,7 +153,6 @@ const mockReferralsData: Referral[] = [
     ytdVolume: 1000,
     feeVolume: 100,
     isActive: false,
-    lastTradeDate: "2025-09-01T08:30:00Z",
   },
   // Tier 2 Referrals (children of user-001 and user-002)
   {
@@ -176,7 +168,6 @@ const mockReferralsData: Referral[] = [
     ytdVolume: 12000,
     feeVolume: 1200,
     isActive: true,
-    lastTradeDate: "2025-10-07T15:30:00Z",
   },
   {
     userId: "user-010",
@@ -192,7 +183,6 @@ const mockReferralsData: Referral[] = [
     ytdVolume: 15000,
     feeVolume: 1500,
     isActive: true,
-    lastTradeDate: "2025-10-09T11:20:00Z",
   },
   {
     userId: "user-011",
@@ -207,7 +197,6 @@ const mockReferralsData: Referral[] = [
     ytdVolume: 8000,
     feeVolume: 800,
     isActive: true,
-    lastTradeDate: "2025-10-08T16:45:00Z",
   },
   {
     userId: "user-012",
@@ -223,7 +212,6 @@ const mockReferralsData: Referral[] = [
     ytdVolume: 5000,
     feeVolume: 500,
     isActive: false,
-    lastTradeDate: "2025-09-25T10:00:00Z",
   },
 ];
 

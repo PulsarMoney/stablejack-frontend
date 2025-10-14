@@ -23,7 +23,7 @@ export function ReferralListItem({
 }: ReferralListItemProps) {
   const displayName =
     referral.email ||
-    `${referral.walletAddress.slice(0, 6)}...${referral.walletAddress.slice(-4)}`;
+    `${referral.userId.slice(0, 8)}...${referral.userId.slice(-6)}`;
 
   const activityColor = referral.isActive ? "success" : "default";
 
@@ -54,7 +54,7 @@ export function ReferralListItem({
           <span className="text-burgundy font-bold text-sm">
             {referral.email
               ? referral.email.charAt(0).toUpperCase()
-              : referral.walletAddress.slice(2, 3).toUpperCase()}
+              : referral.userId.slice(0, 2).toUpperCase()}
           </span>
         </div>
         <div className="flex items-center gap-2 flex-1">

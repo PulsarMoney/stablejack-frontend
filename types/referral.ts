@@ -8,6 +8,58 @@ export interface ReferralCode {
   usageCount: number;
 }
 
+// Backend response types
+export interface BackendTreeUser {
+  userId: string;
+  joinedAt: string;
+  volume: {
+    daily: string;
+    monthly: string;
+    yearly: string;
+    total: string;
+  };
+  commission: {
+    daily: string;
+    monthly: string;
+    yearly: string;
+    total: string;
+  };
+  builderFees: {
+    daily: string;
+    monthly: string;
+    yearly: string;
+    total: string;
+  };
+  subReferrals: BackendTreeUser[];
+}
+
+export interface BackendReferralTree {
+  [userId: string]: BackendTreeUser;
+}
+
+export interface BackendUserReferralData {
+  referralCode?: string;
+  referrer?: {
+    id: string;
+    code: string;
+    email: string;
+    address: string;
+    isActive: boolean;
+  };
+  leaderboard: {
+    xp: {
+      place: number;
+      xp: string;
+      level: number;
+    };
+    volume: {
+      place: number;
+      volume: string;
+    };
+  };
+}
+
+// Frontend types
 export interface Referral {
   userId: string;
   email?: string;
@@ -21,8 +73,7 @@ export interface Referral {
   monthlyVolume?: number;
   ytdVolume?: number;
   feeVolume?: number; // Total fees paid by referred users to StableJack
-  isActive?: boolean; // Traded in last 7 days
-  lastTradeDate?: string;
+  isActive?: boolean; // monthlyVolume > 0
 }
 
 export interface ReferralWithChildren extends Referral {
