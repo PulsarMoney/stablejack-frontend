@@ -1,5 +1,6 @@
 import type { Referral } from "@/types/referral";
 
+import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
 import {
   Modal,
@@ -8,6 +9,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@heroui/modal";
+import { useState } from "react";
 
 interface ReferralDetailModalProps {
   isOpen: boolean;
@@ -22,6 +24,8 @@ export function ReferralDetailModal({
   referral,
   tier2Count = 0,
 }: ReferralDetailModalProps) {
+  const [copied, setCopied] = useState(false);
+
   if (!referral) return null;
 
   const displayName =
@@ -29,6 +33,12 @@ export function ReferralDetailModal({
     `${referral.walletAddress.slice(0, 6)}...${referral.walletAddress.slice(-4)}`;
 
   const activityColor = referral.isActive ? "success" : "default";
+
+  const copyAddress = () => {
+    navigator.clipboard.writeText(referral.walletAddress);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <Modal isOpen={isOpen} size="2xl" onClose={onClose}>
@@ -75,11 +85,24 @@ export function ReferralDetailModal({
                   </h4>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <p className="text-xs text-stable-gray">Wallet Address</p>
-                      <p className="font-mono text-sm">
-                        {referral.walletAddress.slice(0, 10)}...
-                        {referral.walletAddress.slice(-8)}
+                      <p className="text-xs text-stable-gray mb-1">
+                        Wallet Address
                       </p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-mono text-sm">
+                          {referral.walletAddress.slice(0, 10)}...
+                          {referral.walletAddress.slice(-8)}
+                        </p>
+                        <Button
+                          isIconOnly
+                          color="primary"
+                          size="sm"
+                          variant="light"
+                          onPress={copyAddress}
+                        >
+                          {copied ? "✓" : "📋"}
+                        </Button>
+                      </div>
                     </div>
                     <div>
                       <p className="text-xs text-stable-gray">Joined Date</p>
@@ -88,19 +111,9 @@ export function ReferralDetailModal({
                       </p>
                     </div>
                     {referral.email && (
-                      <div>
+                      <div className="col-span-2">
                         <p className="text-xs text-stable-gray">Email</p>
                         <p className="text-sm">{referral.email}</p>
-                      </div>
-                    )}
-                    {referral.lastTradeDate && (
-                      <div>
-                        <p className="text-xs text-stable-gray">Last Trade</p>
-                        <p className="text-sm">
-                          {new Date(
-                            referral.lastTradeDate,
-                          ).toLocaleDateString()}
-                        </p>
                       </div>
                     )}
                   </div>
@@ -156,7 +169,7 @@ export function ReferralDetailModal({
                     {referral.feeVolume !== undefined && (
                       <div className="p-4 bg-burgundy/5 rounded-lg border border-burgundy/20">
                         <p className="text-xs text-stable-gray mb-1">
-                          Fee Volume Generated
+                          Total Fees
                         </p>
                         <p className="text-2xl font-bold text-burgundy">
                           ${referral.feeVolume.toLocaleString()}
@@ -191,12 +204,6 @@ export function ReferralDetailModal({
                 )}
               </div>
             </ModalBody>
-
-            <ModalFooter>
-              <p className="text-xs text-stable-gray mr-auto">
-                User ID: {referral.userId}
-              </p>
-            </ModalFooter>
           </>
         )}
       </ModalContent>
