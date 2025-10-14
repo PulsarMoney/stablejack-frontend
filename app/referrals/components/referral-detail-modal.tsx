@@ -139,7 +139,7 @@ export function ReferralDetailModal({
                   </div>
                 </div>
 
-                {/* Earnings & Fees */}
+                {/* Commission & Fees */}
                 <div>
                   <h4 className="font-semibold text-sm text-stable-gray mb-2">
                     Financial Summary
@@ -147,10 +147,10 @@ export function ReferralDetailModal({
                   <div className="grid grid-cols-2 gap-4">
                     <div className="p-4 bg-warm-red/5 rounded-lg border border-warm-red/20">
                       <p className="text-xs text-stable-gray mb-1">
-                        Your Earnings
+                        Your Commission
                       </p>
                       <p className="text-2xl font-bold text-warm-red">
-                        ${referral.earnings.toFixed(2)}
+                        ${referral.commission.toFixed(2)}
                       </p>
                     </div>
                     {referral.feeVolume !== undefined && (

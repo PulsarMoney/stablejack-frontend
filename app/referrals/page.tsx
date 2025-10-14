@@ -78,9 +78,9 @@ export default function ReferralsPage() {
         {referralStats && <ReferralStatsGrid stats={referralStats} />}
 
         {/* Time-based Metrics */}
-        {referralStats?.volumeMetrics && referralStats?.feeMetrics && (
+        {referralStats?.volumeMetrics && referralStats?.commissionMetrics && (
           <ReferralTimeMetrics
-            feeMetrics={referralStats.feeMetrics}
+            commissionMetrics={referralStats.commissionMetrics}
             volumeMetrics={referralStats.volumeMetrics}
           />
         )}

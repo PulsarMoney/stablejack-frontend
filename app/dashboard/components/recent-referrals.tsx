@@ -51,7 +51,7 @@ export function RecentReferrals({ referrals }: RecentReferralsProps) {
                   ${referral.volume.toLocaleString()}
                 </p>
                 <p className="text-xs text-stable-gray">
-                  Earned: ${referral.earnings.toFixed(2)}
+                  Commission: ${referral.commission.toFixed(2)}
                 </p>
               </div>
             </div>

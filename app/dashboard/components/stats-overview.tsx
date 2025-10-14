@@ -9,9 +9,9 @@ interface ReferralStats {
   totalVolume: number;
   tier1Volume: number;
   tier2Volume: number;
-  totalEarnings: number;
-  tier1Earnings: number;
-  tier2Earnings: number;
+  totalCommission: number;
+  tier1Commission: number;
+  tier2Commission: number;
   dailyFeeVolume?: number;
   monthlyFeeVolume?: number;
   ytdFeeVolume?: number;
@@ -63,15 +63,15 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
       <Card className="border-2 border-burgundy/20">
         <CardBody className="p-6">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm text-stable-gray">Total Earnings</p>
+            <p className="text-sm text-stable-gray">Total Commission</p>
             <DollarSign className="w-5 h-5 text-warm-red/60" />
           </div>
           <p className="text-3xl font-bold text-warm-red">
-            ${stats?.totalEarnings.toFixed(2) || "0.00"}
+            ${stats?.totalCommission.toFixed(2) || "0.00"}
           </p>
           <p className="text-xs text-stable-gray mt-3">
-            Tier 1: ${stats?.tier1Earnings.toFixed(2) || "0.00"} | Tier 2: $
-            {stats?.tier2Earnings.toFixed(2) || "0.00"}
+            Tier 1: ${stats?.tier1Commission.toFixed(2) || "0.00"} | Tier 2: $
+            {stats?.tier2Commission.toFixed(2) || "0.00"}
           </p>
         </CardBody>
       </Card>

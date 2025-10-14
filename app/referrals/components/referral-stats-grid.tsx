@@ -44,18 +44,18 @@ export function ReferralStatsGrid({ stats }: ReferralStatsGridProps) {
         </CardBody>
       </Card>
 
-      {/* Total Earnings */}
+      {/* Total Commission */}
       <Card className="border-2 border-burgundy/20">
         <CardBody className="p-6">
-          <p className="text-sm text-stable-gray mb-1">Total Earnings</p>
+          <p className="text-sm text-stable-gray mb-1">Total Commission</p>
           <p className="text-3xl font-bold text-warm-red mb-1">
-            ${stats.totalEarnings.toFixed(2)}
+            ${stats.totalCommission.toFixed(2)}
           </p>
           <p className="text-xs text-stable-gray">
-            T1: ${stats.tier1Earnings.toFixed(2)}
+            T1: ${stats.tier1Commission.toFixed(2)}
           </p>
           <p className="text-xs text-stable-gray">
-            T2: ${stats.tier2Earnings.toFixed(2)}
+            T2: ${stats.tier2Commission.toFixed(2)}
           </p>
         </CardBody>
       </Card>

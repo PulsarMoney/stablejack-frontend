@@ -51,8 +51,8 @@ export function ReferralTreeEnhanced({
             (sum, t2) => sum + t2.volume,
             0,
           ),
-          tier2TotalEarnings: tier2Children.reduce(
-            (sum, t2) => sum + t2.earnings,
+          tier2TotalCommission: tier2Children.reduce(
+            (sum, t2) => sum + t2.commission,
             0,
           ),
         };
@@ -82,8 +82,8 @@ export function ReferralTreeEnhanced({
         case "volume":
           comparison = a.volume - b.volume;
           break;
-        case "earnings":
-          comparison = a.earnings - b.earnings;
+        case "commission":
+          comparison = a.commission - b.commission;
           break;
         case "date":
           comparison =
@@ -186,7 +186,7 @@ export function ReferralTreeEnhanced({
             onChange={(e) => setSortBy(e.target.value as ReferralSortBy)}
           >
             <SelectItem key="volume">Volume</SelectItem>
-            <SelectItem key="earnings">Earnings</SelectItem>
+            <SelectItem key="commission">Commission</SelectItem>
             <SelectItem key="date">Date Joined</SelectItem>
             <SelectItem key="tier2Count">Tier 2 Count</SelectItem>
             <SelectItem key="active">Activity</SelectItem>
@@ -204,173 +204,40 @@ export function ReferralTreeEnhanced({
           </Select>
         </div>
 
-        {/* Referral List */}
-        <div className="space-y-4">
+        {/* Referral Table */}
+        <div className="border-2 border-burgundy/20 rounded-lg overflow-hidden">
+          {/* Table Header */}
+          <div className="grid grid-cols-[1fr_auto_auto_auto_auto_auto_auto] gap-4 p-4 bg-burgundy/10 font-semibold text-sm text-burgundy border-b-2 border-burgundy/20">
+            <div>Username</div>
+            <div className="text-center min-w-[80px]">Tier</div>
+            <div className="min-w-[100px]">Joined</div>
+            <div className="text-right min-w-[120px]">Total Volume</div>
+            <div className="text-right min-w-[100px]">Total Fees</div>
+            <div className="text-right min-w-[140px]">Total Commission</div>
+            <div className="text-center min-w-[100px]">Status</div>
+          </div>
+
+          {/* Table Body */}
           {filteredAndSortedTier1.map((tier1) => {
             const isExpanded = expandedUsers.has(tier1.userId);
             const tier2Children = tier2ByParent.get(tier1.userId) || [];
             const hasTier2 = tier2Children.length > 0;
 
             return (
-              <div key={tier1.userId} className="space-y-2">
-                {/* Tier 1 Card */}
-                {hasTier2 ? (
-                  // Custom card for tier1 with tier2
-                  <div className="flex flex-col p-4 rounded-lg border transition-all bg-beige/50 border-burgundy/10 hover:border-burgundy/30">
-                    {/* Main row with avatar, info, and metrics */}
-                    <div
-                      className={`flex items-start justify-between ${
-                        onReferralClick ? "cursor-pointer" : ""
-                      }`}
-                      role={onReferralClick ? "button" : undefined}
-                      tabIndex={onReferralClick ? 0 : undefined}
-                      onClick={() => onReferralClick?.(tier1)}
-                      onKeyDown={(e) => {
-                        if (
-                          onReferralClick &&
-                          (e.key === "Enter" || e.key === " ")
-                        ) {
-                          e.preventDefault();
-                          onReferralClick(tier1);
-                        }
-                      }}
-                    >
-                      <div className="flex items-center gap-4 flex-1">
-                        {/* Avatar */}
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-burgundy/20">
-                          <span className="text-burgundy font-bold">
-                            {tier1.email
-                              ? tier1.email.charAt(0).toUpperCase()
-                              : tier1.walletAddress.slice(2, 3).toUpperCase()}
-                          </span>
-                        </div>
-
-                        {/* Info */}
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <p className="font-semibold">
-                              {tier1.email ||
-                                `${tier1.walletAddress.slice(0, 6)}...${tier1.walletAddress.slice(-4)}`}
-                            </p>
-                            <Chip
-                              color={tier1.isActive ? "success" : "default"}
-                              size="sm"
-                              variant="dot"
-                            >
-                              {tier1.isActive ? "active" : "inactive"}
-                            </Chip>
-                          </div>
-                          <div className="flex items-center gap-3 text-xs text-stable-gray">
-                            <span>
-                              Joined{" "}
-                              {new Date(tier1.joinedAt).toLocaleDateString()}
-                            </span>
-                            <span>•</span>
-                            <span>Tier 1</span>
-                            {tier1.lastTradeDate && (
-                              <>
-                                <span>•</span>
-                                <span>
-                                  Last trade:{" "}
-                                  {new Date(
-                                    tier1.lastTradeDate,
-                                  ).toLocaleDateString()}
-                                </span>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Metrics */}
-                      <div className="grid grid-cols-3 gap-4 text-right">
-                        <div>
-                          <p className="text-xs text-stable-gray mb-1">
-                            Volume
-                          </p>
-                          <p className="font-semibold text-burgundy">
-                            ${tier1.volume.toLocaleString()}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-stable-gray mb-1">
-                            Earned
-                          </p>
-                          <p className="font-semibold text-burgundy">
-                            ${tier1.earnings.toFixed(2)}
-                          </p>
-                        </div>
-                        {tier1.feeVolume !== undefined && (
-                          <div>
-                            <p className="text-xs text-stable-gray mb-1">
-                              Fees
-                            </p>
-                            <p className="font-semibold text-burgundy">
-                              ${tier1.feeVolume.toLocaleString()}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Tier 2 summary row */}
-                    {!isExpanded && (
-                      <div className="flex items-center justify-between mt-3 pt-3 border-t border-burgundy/10">
-                        <div className="flex gap-2">
-                          <Chip color="secondary" size="sm" variant="flat">
-                            T2 Volume: $
-                            {tier1.tier2TotalVolume.toLocaleString()}
-                          </Chip>
-                          <Chip color="secondary" size="sm" variant="flat">
-                            T2 Earnings: ${tier1.tier2TotalEarnings.toFixed(2)}
-                          </Chip>
-                        </div>
-                        <Button
-                          color="primary"
-                          size="sm"
-                          variant="light"
-                          onPress={() => toggleExpand(tier1.userId)}
-                        >
-                          ▼ {tier2Children.length} Tier 2
-                        </Button>
-                      </div>
-                    )}
-
-                    {/* Expand button when expanded */}
-                    {isExpanded && (
-                      <div className="flex justify-end mt-3 pt-3 border-t border-burgundy/10">
-                        <Button
-                          color="primary"
-                          size="sm"
-                          variant="light"
-                          onPress={() => toggleExpand(tier1.userId)}
-                        >
-                          ▲ Collapse {tier2Children.length} Tier 2
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  // Standard card for tier1 without tier2
-                  <ReferralListItem
-                    referral={tier1}
-                    onDetailClick={onReferralClick}
-                  />
-                )}
+              <div key={tier1.userId}>
+                {/* Tier 1 Row */}
+                <ReferralListItem
+                  hasTier2={hasTier2}
+                  isExpanded={isExpanded}
+                  referral={tier1}
+                  tier2Count={tier2Children.length}
+                  onDetailClick={onReferralClick}
+                  onExpandToggle={() => toggleExpand(tier1.userId)}
+                />
 
                 {/* Expanded Tier 2 Children */}
                 {isExpanded && hasTier2 && (
-                  <div className="ml-12 pl-4 border-l-2 border-burgundy/20 space-y-2">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Chip color="secondary" variant="flat">
-                        Tier 2 Referrals ({tier2Children.length})
-                      </Chip>
-                      <span className="text-xs text-stable-gray">
-                        Total Volume: ${tier1.tier2TotalVolume.toLocaleString()}
-                        {" • Earnings: $"}
-                        {tier1.tier2TotalEarnings.toFixed(2)}
-                      </span>
-                    </div>
+                  <div className="bg-burgundy/10">
                     {tier2Children.map((tier2) => (
                       <ReferralListItem
                         key={tier2.userId}

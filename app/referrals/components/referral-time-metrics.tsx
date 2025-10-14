@@ -1,15 +1,15 @@
-import type { FeeMetrics, VolumeMetrics } from "@/types/referral";
+import type { CommissionMetrics, VolumeMetrics } from "@/types/referral";
 
 import { Card, CardBody } from "@heroui/card";
 import { Chip } from "@heroui/chip";
 
 interface ReferralTimeMetricsProps {
   volumeMetrics: VolumeMetrics;
-  feeMetrics: FeeMetrics;
+  commissionMetrics: CommissionMetrics;
 }
 
 export function ReferralTimeMetrics({
-  feeMetrics,
+  commissionMetrics,
   volumeMetrics,
 }: ReferralTimeMetricsProps) {
   return (
@@ -27,7 +27,7 @@ export function ReferralTimeMetrics({
             ${volumeMetrics.daily.toLocaleString()}
           </p>
           <p className="text-xs text-stable-gray">
-            Fees: ${feeMetrics.daily.toLocaleString()}
+            Commission: ${commissionMetrics.daily.toLocaleString()}
           </p>
         </CardBody>
       </Card>
@@ -45,7 +45,7 @@ export function ReferralTimeMetrics({
             ${volumeMetrics.monthly.toLocaleString()}
           </p>
           <p className="text-xs text-stable-gray">
-            Fees: ${feeMetrics.monthly.toLocaleString()}
+            Commission: ${commissionMetrics.monthly.toLocaleString()}
           </p>
         </CardBody>
       </Card>
@@ -63,7 +63,7 @@ export function ReferralTimeMetrics({
             ${volumeMetrics.ytd.toLocaleString()}
           </p>
           <p className="text-xs text-stable-gray">
-            Fees: ${feeMetrics.ytd.toLocaleString()}
+            Commission: ${commissionMetrics.ytd.toLocaleString()}
           </p>
         </CardBody>
       </Card>
@@ -81,7 +81,7 @@ export function ReferralTimeMetrics({
             ${volumeMetrics.allTime.toLocaleString()}
           </p>
           <p className="text-xs text-stable-gray">
-            Fees: ${feeMetrics.allTime.toLocaleString()}
+            Commission: ${commissionMetrics.allTime.toLocaleString()}
           </p>
         </CardBody>
       </Card>

@@ -15,12 +15,12 @@ export interface Referral {
   tier: 1 | 2;
   joinedAt: string;
   volume: number;
-  earnings: number;
+  commission: number; // Commission paid to user for referring
   parentId?: string; // For tier2: references their tier1 parent
   dailyVolume?: number;
   monthlyVolume?: number;
   ytdVolume?: number;
-  feeVolume?: number; // Total fees generated
+  feeVolume?: number; // Total fees paid by referred users to StableJack
   isActive?: boolean; // Traded in last 7 days
   lastTradeDate?: string;
 }
@@ -29,7 +29,7 @@ export interface ReferralWithChildren extends Referral {
   tier2Referrals: Referral[];
   tier2Count: number;
   tier2TotalVolume: number;
-  tier2TotalEarnings: number;
+  tier2TotalCommission: number;
 }
 
 export interface ReferredBy {
@@ -54,6 +54,13 @@ export interface FeeMetrics {
   allTime: number;
 }
 
+export interface CommissionMetrics {
+  daily: number;
+  monthly: number;
+  ytd: number;
+  allTime: number;
+}
+
 export interface ReferralStats {
   totalReferrals: number;
   tier1Referrals: number;
@@ -61,13 +68,14 @@ export interface ReferralStats {
   totalVolume: number;
   tier1Volume: number;
   tier2Volume: number;
-  totalEarnings: number;
-  tier1Earnings: number;
-  tier2Earnings: number;
+  totalCommission: number; // Total commission paid to user
+  tier1Commission: number;
+  tier2Commission: number;
   referrals: Referral[];
   referredBy?: ReferredBy;
   volumeMetrics?: VolumeMetrics;
   feeMetrics?: FeeMetrics;
+  commissionMetrics?: CommissionMetrics;
   activeReferrals?: number; // Users who traded in last 30 days
 }
 
@@ -78,7 +86,7 @@ export interface ReferralTree {
 
 export type ReferralSortBy =
   | "volume"
-  | "earnings"
+  | "commission"
   | "date"
   | "tier2Count"
   | "active";

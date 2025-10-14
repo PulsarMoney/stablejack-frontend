@@ -77,7 +77,7 @@ export function ReferralTree({ referrals }: ReferralTreeProps) {
                       ${referral.volume.toLocaleString()}
                     </p>
                     <p className="text-xs text-stable-gray">
-                      Earned: ${referral.earnings.toFixed(2)}
+                      Earned: ${referral.commission.toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -127,7 +127,7 @@ export function ReferralTree({ referrals }: ReferralTreeProps) {
                       ${referral.volume.toLocaleString()}
                     </p>
                     <p className="text-xs text-stable-gray">
-                      Earned: ${referral.earnings.toFixed(2)}
+                      Earned: ${referral.commission.toFixed(2)}
                     </p>
                   </div>
                 </div>

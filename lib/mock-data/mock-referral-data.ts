@@ -1,4 +1,5 @@
 import type {
+  CommissionMetrics,
   FeeMetrics,
   Referral,
   ReferralCode,
@@ -34,6 +35,13 @@ const mockFeeMetrics: FeeMetrics = {
   allTime: 12500,
 };
 
+const mockCommissionMetrics: CommissionMetrics = {
+  daily: 25,
+  monthly: 450,
+  ytd: 1250,
+  allTime: 1250,
+};
+
 // Enhanced referrals with parent-child relationships and time metrics
 const mockReferralsData: Referral[] = [
   // Tier 1 Referrals
@@ -44,7 +52,7 @@ const mockReferralsData: Referral[] = [
     tier: 1,
     joinedAt: "2024-02-01T14:20:00Z",
     volume: 15000,
-    earnings: 150,
+    commission: 150,
     dailyVolume: 500,
     monthlyVolume: 12000,
     ytdVolume: 15000,
@@ -59,7 +67,7 @@ const mockReferralsData: Referral[] = [
     tier: 1,
     joinedAt: "2024-02-05T09:15:00Z",
     volume: 22000,
-    earnings: 220,
+    commission: 220,
     dailyVolume: 800,
     monthlyVolume: 15000,
     ytdVolume: 22000,
@@ -73,7 +81,7 @@ const mockReferralsData: Referral[] = [
     tier: 1,
     joinedAt: "2024-02-10T16:45:00Z",
     volume: 18500,
-    earnings: 185,
+    commission: 185,
     dailyVolume: 600,
     monthlyVolume: 11000,
     ytdVolume: 18500,
@@ -88,7 +96,7 @@ const mockReferralsData: Referral[] = [
     tier: 1,
     joinedAt: "2024-02-15T11:30:00Z",
     volume: 12000,
-    earnings: 120,
+    commission: 120,
     dailyVolume: 300,
     monthlyVolume: 7000,
     ytdVolume: 12000,
@@ -102,7 +110,7 @@ const mockReferralsData: Referral[] = [
     tier: 1,
     joinedAt: "2024-02-20T08:00:00Z",
     volume: 8500,
-    earnings: 85,
+    commission: 85,
     dailyVolume: 0,
     monthlyVolume: 0,
     ytdVolume: 8500,
@@ -117,7 +125,7 @@ const mockReferralsData: Referral[] = [
     tier: 1,
     joinedAt: "2024-02-25T13:20:00Z",
     volume: 5000,
-    earnings: 50,
+    commission: 50,
     dailyVolume: 200,
     monthlyVolume: 4000,
     ytdVolume: 5000,
@@ -131,7 +139,7 @@ const mockReferralsData: Referral[] = [
     tier: 1,
     joinedAt: "2024-03-01T10:10:00Z",
     volume: 3000,
-    earnings: 30,
+    commission: 30,
     dailyVolume: 100,
     monthlyVolume: 2500,
     ytdVolume: 3000,
@@ -146,7 +154,7 @@ const mockReferralsData: Referral[] = [
     tier: 1,
     joinedAt: "2024-03-05T15:50:00Z",
     volume: 1000,
-    earnings: 10,
+    commission: 10,
     dailyVolume: 0,
     monthlyVolume: 500,
     ytdVolume: 1000,
@@ -162,7 +170,7 @@ const mockReferralsData: Referral[] = [
     parentId: "user-001", // Child of Alice
     joinedAt: "2024-03-08T12:30:00Z",
     volume: 12000,
-    earnings: 120,
+    commission: 120,
     dailyVolume: 400,
     monthlyVolume: 8000,
     ytdVolume: 12000,
@@ -178,7 +186,7 @@ const mockReferralsData: Referral[] = [
     parentId: "user-001", // Child of Alice
     joinedAt: "2024-03-10T09:40:00Z",
     volume: 15000,
-    earnings: 150,
+    commission: 150,
     dailyVolume: 500,
     monthlyVolume: 10000,
     ytdVolume: 15000,
@@ -193,7 +201,7 @@ const mockReferralsData: Referral[] = [
     parentId: "user-002", // Child of Bob
     joinedAt: "2024-03-15T14:15:00Z",
     volume: 8000,
-    earnings: 80,
+    commission: 80,
     dailyVolume: 250,
     monthlyVolume: 5500,
     ytdVolume: 8000,
@@ -209,7 +217,7 @@ const mockReferralsData: Referral[] = [
     parentId: "user-002", // Child of Bob
     joinedAt: "2024-03-20T11:25:00Z",
     volume: 5000,
-    earnings: 50,
+    commission: 50,
     dailyVolume: 0,
     monthlyVolume: 3500,
     ytdVolume: 5000,
@@ -226,12 +234,13 @@ export const mockReferralStats: ReferralStats = {
   totalVolume: 125000,
   tier1Volume: 85000,
   tier2Volume: 40000,
-  totalEarnings: 1250,
-  tier1Earnings: 850,
-  tier2Earnings: 400,
+  totalCommission: 1250,
+  tier1Commission: 850,
+  tier2Commission: 400,
   referrals: mockReferralsData,
   volumeMetrics: mockVolumeMetrics,
   feeMetrics: mockFeeMetrics,
+  commissionMetrics: mockCommissionMetrics,
   activeReferrals: 8, // 8 out of 12 traded in last 30 days
   referredBy: {
     userId: "referrer-001",
