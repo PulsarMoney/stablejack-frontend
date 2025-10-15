@@ -1,17 +1,22 @@
 import type { ApiResponse } from "@/types/api";
-import type { ReferralCode, ReferralStats } from "@/types/referral";
+import type {
+  BackendReferralTree,
+  BackendUserReferralData,
+  ReferralCode,
+  ReferralStats,
+} from "@/types/referral";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { apiClient } from "@/lib/axios";
 import {
-  mockReferralCode,
-  mockReferralStats,
-  simulateApiDelay,
-} from "@/lib/mock-data";
+  calculateAggregateStats,
+  calculateCommissionMetrics,
+  calculateFeeMetrics,
+  calculateVolumeMetrics,
+  transformTreeToReferrals,
+} from "@/lib/transform-referral-data";
 import { queryClient } from "@/lib/queryClient";
-
-const USE_MOCK_DATA = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true" || false;
 
 interface ChangeCodeData {
   newCode: string;
@@ -25,12 +30,6 @@ export const useGetReferralCode = () => {
   return useQuery({
     queryKey: ["referral", "code"],
     queryFn: async () => {
-      if (USE_MOCK_DATA) {
-        await simulateApiDelay();
-
-        return mockReferralCode;
-      }
-
       const response =
         await apiClient.get<ApiResponse<ReferralCode>>("/api/referral/code");
 
@@ -42,18 +41,6 @@ export const useGetReferralCode = () => {
 export const useChangeReferralCode = () => {
   return useMutation({
     mutationFn: async (data: ChangeCodeData) => {
-      if (USE_MOCK_DATA) {
-        await simulateApiDelay();
-
-        return {
-          success: true,
-          data: {
-            ...mockReferralCode,
-            code: data.newCode,
-          },
-        };
-      }
-
       const response = await apiClient.put<ApiResponse<ReferralCode>>(
         "/api/referral/code",
         data,
@@ -70,17 +57,6 @@ export const useChangeReferralCode = () => {
 export const useApplyReferralCode = () => {
   return useMutation({
     mutationFn: async (data: ApplyCodeData) => {
-      if (USE_MOCK_DATA) {
-        await simulateApiDelay();
-
-        return {
-          success: true,
-          data: {
-            message: `Successfully applied referral code: ${data.code}`,
-          },
-        };
-      }
-
       const response = await apiClient.post<ApiResponse<{ message: string }>>(
         "/api/referral/apply",
         data,
@@ -98,17 +74,41 @@ export const useGetReferralStats = () => {
   return useQuery({
     queryKey: ["referral", "stats"],
     queryFn: async () => {
-      if (USE_MOCK_DATA) {
-        await simulateApiDelay();
+      // Fetch referral tree with full metrics
+      const treeResponse = await apiClient.get<
+        ApiResponse<BackendReferralTree>
+      >("/api/referral/tree");
 
-        return mockReferralStats;
-      }
+      // Fetch user's referral data (referrer info, leaderboard)
+      const meResponse = await apiClient.get<
+        ApiResponse<BackendUserReferralData>
+      >("/api/referral/me");
 
-      const response = await apiClient.get<ApiResponse<ReferralStats>>(
-        "/api/referral/stats",
-      );
+      // Transform backend tree to frontend referrals array
+      const referrals = transformTreeToReferrals(treeResponse.data.data);
 
-      return response.data.data;
+      // Calculate aggregate statistics
+      const aggregates = calculateAggregateStats(referrals);
+
+      // Build complete ReferralStats object
+      const stats: ReferralStats = {
+        ...aggregates,
+        referrals,
+        referredBy: meResponse.data.data.referrer
+          ? {
+              userId: meResponse.data.data.referrer.id,
+              walletAddress: meResponse.data.data.referrer.address,
+              email: meResponse.data.data.referrer.email,
+              referralCode: meResponse.data.data.referrer.code,
+              referredAt: new Date().toISOString(), // Backend doesn't provide this
+            }
+          : undefined,
+        volumeMetrics: calculateVolumeMetrics(referrals),
+        feeMetrics: calculateFeeMetrics(referrals),
+        commissionMetrics: calculateCommissionMetrics(referrals),
+      };
+
+      return stats;
     },
   });
 };

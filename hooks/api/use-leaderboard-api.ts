@@ -4,69 +4,100 @@ import type {
   PublicLeaderboardEntry,
   TradingLeaderboardEntry,
   UserRank,
+  BackendVolumeLeaderboardResponse,
+  BackendXpLeaderboardResponse,
 } from "@/types/leaderboard";
 
 import { useQuery } from "@tanstack/react-query";
 
 import { apiClient } from "@/lib/axios";
 import {
-  mockPublicLeaderboard,
-  mockTradingLeaderboard,
-  mockUserRank,
-  simulateApiDelay,
-} from "@/lib/mock-data";
-
-const USE_MOCK_DATA = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true" || false;
+  transformVolumeLeaderboard,
+  transformXpLeaderboard,
+} from "@/lib/transform-leaderboard-data";
+import { useAuth } from "@/hooks/useAuth";
 
 export const useGetTradingLeaderboard = (filters?: LeaderboardFilters) => {
+  const { address } = useAuth(); // Get user's wallet address from Privy
+
   return useQuery({
     queryKey: ["leaderboard", "trading", filters],
     queryFn: async () => {
-      if (USE_MOCK_DATA) {
-        await simulateApiDelay();
-
-        // Apply limit filter if provided
-        const limit = filters?.limit || mockTradingLeaderboard.length;
-
-        return mockTradingLeaderboard.slice(0, limit);
-      }
-
       const params = new URLSearchParams();
 
-      if (filters?.timeRange) params.append("timeRange", filters.timeRange);
+      // Map frontend timeRange to backend period parameter
+      const period = filters?.timeRange || "all-time";
+      params.append("period", period);
+
       if (filters?.limit) params.append("limit", filters.limit.toString());
+      if (filters?.page) params.append("page", filters.page.toString());
 
       const response = await apiClient.get<
-        ApiResponse<{ leaderboard: TradingLeaderboardEntry[] }>
-      >(`/api/leaderboard/trading?${params.toString()}`);
+        ApiResponse<BackendVolumeLeaderboardResponse>
+      >(`/api/leaderboard/volume?${params.toString()}`);
 
-      return response.data.data.leaderboard;
+      const { leaderboard, pagination } = response.data.data;
+
+      // Calculate starting rank based on pagination
+      const startRank = (pagination.page - 1) * pagination.limit + 1;
+
+      // Find current user by matching wallet address in the leaderboard data
+      const currentUserEntry = leaderboard.find(
+        (entry: any) => entry.address?.toLowerCase() === address?.toLowerCase()
+      );
+      const currentUserId = currentUserEntry?.userId;
+
+      return {
+        data: transformVolumeLeaderboard(leaderboard, currentUserId, startRank),
+        pagination,
+      };
     },
   });
 };
 
 export const useGetPublicLeaderboard = (filters?: LeaderboardFilters) => {
+  const { address } = useAuth(); // Get user's wallet address from Privy
+
   return useQuery({
     queryKey: ["leaderboard", "public", filters],
     queryFn: async () => {
-      if (USE_MOCK_DATA) {
-        await simulateApiDelay();
-
-        // Apply limit filter if provided
-        const limit = filters?.limit || mockPublicLeaderboard.length;
-
-        return mockPublicLeaderboard.slice(0, limit);
-      }
-
       const params = new URLSearchParams();
 
       if (filters?.limit) params.append("limit", filters.limit.toString());
+      if (filters?.page) params.append("page", filters.page.toString());
 
       const response = await apiClient.get<
-        ApiResponse<{ leaderboard: PublicLeaderboardEntry[] }>
-      >(`/api/leaderboard/public?${params.toString()}`);
+        ApiResponse<BackendXpLeaderboardResponse>
+      >(`/api/leaderboard/xp?${params.toString()}`);
 
-      return response.data.data.leaderboard;
+      const { leaderboard, count } = response.data.data;
+
+      // Calculate starting rank based on pagination
+      const page = filters?.page || 1;
+      const limit = filters?.limit || 20;
+      const startRank = (page - 1) * limit + 1;
+
+      // Find current user by matching wallet address in the leaderboard data
+      const currentUserEntry = leaderboard.find(
+        (entry: any) => entry.address?.toLowerCase() === address?.toLowerCase()
+      );
+      const currentUserId = currentUserEntry?.userId;
+
+      // Calculate pagination metadata
+      const totalPages = Math.ceil(count / limit);
+      const pagination = {
+        page,
+        limit,
+        totalItems: count,
+        totalPages,
+        hasNext: page < totalPages,
+        hasPrevious: page > 1,
+      };
+
+      return {
+        data: transformXpLeaderboard(leaderboard, currentUserId, startRank),
+        pagination,
+      };
     },
   });
 };
@@ -75,17 +106,23 @@ export const useGetUserRank = () => {
   return useQuery({
     queryKey: ["leaderboard", "user-rank"],
     queryFn: async () => {
-      if (USE_MOCK_DATA) {
-        await simulateApiDelay();
+      // Use /api/referral/me which has all the user's leaderboard data
+      const response = await apiClient.get<ApiResponse<any>>("/api/referral/me");
 
-        return mockUserRank;
-      }
+      const leaderboardData = response.data.data.leaderboard;
 
-      const response = await apiClient.get<ApiResponse<UserRank>>(
-        "/api/leaderboard/user-rank",
-      );
+      const userRank: UserRank = {
+        publicRank: parseInt(leaderboardData.xp.place),
+        totalXP: parseFloat(leaderboardData.xp.xp),
+        level: leaderboardData.xp.level,
+        tradingXPBreakdown: 0, // Not provided by /me endpoint
+        referralXPBreakdown: 0, // Not provided by /me endpoint
+        achievementXPBreakdown: 0, // Not provided by /me endpoint
+        tradingRank: leaderboardData.volume.place,
+        tradingVolume: parseFloat(leaderboardData.volume.volume),
+      };
 
-      return response.data.data;
+      return userRank;
     },
   });
 };

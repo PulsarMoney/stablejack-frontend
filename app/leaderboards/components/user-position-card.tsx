@@ -18,7 +18,6 @@ export function UserPositionCard({
 
   const rank =
     selectedTab === "trading" ? userRank.tradingRank : userRank.publicRank;
-  const xp = selectedTab === "trading" ? userRank.tradingXP : userRank.totalXP;
 
   return (
     <Card className="border-2 border-burgundy bg-burgundy/5">
@@ -28,9 +27,16 @@ export function UserPositionCard({
             <p className="text-sm text-stable-gray mb-1">Your Position</p>
             <div className="flex items-center gap-3">
               <p className="text-3xl font-bold text-burgundy">#{rank}</p>
-              <Chip color="primary" variant="flat">
-                {xp?.toLocaleString() || 0} XP
-              </Chip>
+              {selectedTab === "public" && (
+                <Chip color="primary" variant="flat">
+                  {userRank.totalXP?.toLocaleString() || 0} XP
+                </Chip>
+              )}
+              {selectedTab === "trading" && (
+                <Chip color="primary" variant="flat">
+                  ${userRank.tradingVolume?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0.00"}
+                </Chip>
+              )}
             </div>
           </div>
           <div className="text-4xl">

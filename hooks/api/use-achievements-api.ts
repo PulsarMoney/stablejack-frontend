@@ -1,105 +1,60 @@
 import type { ApiResponse } from "@/types/api";
-import type { Achievement, AchievementFilters } from "@/types/achievement";
+import type {
+  AchievementFilters,
+  BackendAchievementsResponse,
+} from "@/types/achievement";
 
 import { useQuery } from "@tanstack/react-query";
 
 import { apiClient } from "@/lib/axios";
 import {
-  getAchievementById,
-  getAchievementsByStatus,
-  mockAchievementStats,
-  simulateApiDelay,
-} from "@/lib/mock-data";
-
-const USE_MOCK_DATA = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true" || false;
+  filterAchievements,
+  transformBackendAchievements,
+} from "@/lib/transform-achievement-data";
 
 export const useGetAchievements = (filters?: AchievementFilters) => {
   return useQuery({
     queryKey: ["achievements", filters],
     queryFn: async () => {
-      if (USE_MOCK_DATA) {
-        await simulateApiDelay();
-
-        let achievements = getAchievementsByStatus("all");
-
-        // Apply status filter
-        if (filters?.status && filters.status !== "all") {
-          achievements = getAchievementsByStatus(filters.status);
-        }
-
-        // Apply category filter
-        if (filters?.category && filters.category !== "all") {
-          achievements = achievements.filter(
-            (a) => a.category === filters.category,
-          );
-        }
-
-        return achievements;
-      }
-
-      const params = new URLSearchParams();
-
-      if (filters?.status && filters.status !== "all") {
-        params.append("status", filters.status);
-      }
-      if (filters?.category) {
-        params.append("category", filters.category);
-      }
-
+      // Fetch all achievements from backend
       const response = await apiClient.get<
-        ApiResponse<{ achievements: Achievement[] }>
-      >(`/api/achievements?${params.toString()}`);
+        ApiResponse<BackendAchievementsResponse>
+      >("/api/achievements/me");
 
-      return response.data.data.achievements;
+      // Transform backend data to frontend format
+      const achievements = transformBackendAchievements(response.data.data);
+
+      // Apply frontend filters
+      return filterAchievements(achievements, filters);
     },
   });
 };
 
-export const useGetAchievementProgress = (achievementId: string) => {
-  return useQuery({
-    queryKey: ["achievement", "progress", achievementId],
-    queryFn: async () => {
-      if (USE_MOCK_DATA) {
-        await simulateApiDelay();
-
-        const achievement = getAchievementById(achievementId);
-
-        if (!achievement) {
-          throw new Error(`Achievement ${achievementId} not found`);
-        }
-
-        return achievement;
-      }
-
-      const response = await apiClient.get<ApiResponse<Achievement>>(
-        `/api/achievements/${achievementId}/progress`,
-      );
-
-      return response.data.data;
-    },
-    enabled: !!achievementId,
-  });
-};
+// Removed: useGetAchievementProgress - progress is included in main response
 
 export const useGetAchievementStats = () => {
   return useQuery({
     queryKey: ["achievements", "stats"],
     queryFn: async () => {
-      if (USE_MOCK_DATA) {
-        await simulateApiDelay();
-
-        return mockAchievementStats;
-      }
-
+      // Fetch achievements data
       const response = await apiClient.get<
-        ApiResponse<{
-          totalCompleted: number;
-          totalXPEarned: number;
-          completionRate: number;
-        }>
-      >("/api/achievements/stats");
+        ApiResponse<BackendAchievementsResponse>
+      >("/api/achievements/me");
 
-      return response.data.data;
+      // Transform achievements
+      const achievements = transformBackendAchievements(response.data.data);
+
+      // Calculate and return stats
+      const { calculateAchievementStats } = await import(
+        "@/lib/transform-achievement-data"
+      );
+
+      return calculateAchievementStats(
+        achievements,
+        response.data.data.summary,
+        response.data.data.totalXp,
+        response.data.data.currentLevel,
+      );
     },
   });
 };
