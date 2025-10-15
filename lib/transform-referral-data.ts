@@ -40,7 +40,9 @@ function convertTreeUserToReferral(
 
   return {
     userId: treeUser.userId,
-    walletAddress: generateDisplayAddress(treeUser.userId),
+    email: treeUser.username || undefined,
+    // Use real wallet address if available, otherwise use userId as fallback
+    walletAddress: treeUser.walletAddress || generateDisplayAddress(treeUser.userId),
     tier,
     joinedAt: treeUser.joinedAt,
     volume: totalVolume,

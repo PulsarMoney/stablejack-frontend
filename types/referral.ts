@@ -11,6 +11,8 @@ export interface ReferralCode {
 // Backend response types
 export interface BackendTreeUser {
   userId: string;
+  walletAddress?: string; // Now available from backend
+  username?: string; // Email/username if available
   joinedAt: string;
   volume: {
     daily: string;

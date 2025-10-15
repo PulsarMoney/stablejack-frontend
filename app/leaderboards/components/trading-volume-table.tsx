@@ -1,8 +1,7 @@
-import type { TimeRange, TradingLeaderboardEntry } from "@/types/leaderboard";
+import type { TradingLeaderboardEntry } from "@/types/leaderboard";
 
-import { useMemo, useState } from "react";
 import { Chip } from "@heroui/chip";
-import { Select, SelectItem } from "@heroui/select";
+import { Button } from "@heroui/button";
 import {
   Table,
   TableHeader,
@@ -14,11 +13,19 @@ import {
 
 interface TradingVolumeTableProps {
   data: TradingLeaderboardEntry[];
+  page?: number;
+  hasNext?: boolean;
+  hasPrevious?: boolean;
+  onPageChange?: (newPage: number) => void;
 }
 
-export function TradingVolumeTable({ data }: TradingVolumeTableProps) {
-  const [timeRange, setTimeRange] = useState<TimeRange>("all-time");
-
+export function TradingVolumeTable({
+  data,
+  page = 1,
+  hasNext = false,
+  hasPrevious = false,
+  onPageChange,
+}: TradingVolumeTableProps) {
   const getRankBadge = (rank: number) => {
     if (rank === 1) return "🥇";
     if (rank === 2) return "🥈";
@@ -27,82 +34,28 @@ export function TradingVolumeTable({ data }: TradingVolumeTableProps) {
     return rank;
   };
 
-  // Get volume based on selected time range
-  const getVolumeForTimeRange = (entry: TradingLeaderboardEntry): number => {
-    switch (timeRange) {
-      case "daily":
-        return entry.dailyVolume || 0;
-      case "weekly":
-        return entry.weeklyVolume || 0;
-      case "monthly":
-        return entry.monthlyVolume || 0;
-      case "all-time":
-      default:
-        return entry.volume;
-    }
-  };
-
-  // Sort data based on selected time range volume
-  const sortedData = useMemo(() => {
-    const sorted = [...data].sort((a, b) => {
-      const volumeA = getVolumeForTimeRange(a);
-      const volumeB = getVolumeForTimeRange(b);
-
-      return volumeB - volumeA;
+  const formatNumber = (value: number | null | undefined): string => {
+    if (value === null || value === undefined) return "0.00";
+    return value.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     });
-
-    // Re-assign ranks based on new sorting
-    return sorted.map((entry, index) => ({
-      ...entry,
-      rank: index + 1,
-    }));
-  }, [data, timeRange]);
-
-  const getTimeRangeLabel = () => {
-    switch (timeRange) {
-      case "daily":
-        return "Today";
-      case "weekly":
-        return "This Week";
-      case "monthly":
-        return "This Month";
-      case "all-time":
-      default:
-        return "All Time";
-    }
   };
 
   return (
     <div className="space-y-4">
-      {/* Time Range Filter */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-burgundy">
-          Trading Volume - {getTimeRangeLabel()}
-        </h3>
-        <Select
-          className="max-w-[200px]"
-          label="Time Range"
-          selectedKeys={[timeRange]}
-          size="sm"
-          onChange={(e) => setTimeRange(e.target.value as TimeRange)}
-        >
-          <SelectItem key="daily">Daily</SelectItem>
-          <SelectItem key="weekly">Weekly</SelectItem>
-          <SelectItem key="monthly">Monthly</SelectItem>
-          <SelectItem key="all-time">All Time</SelectItem>
-        </Select>
-      </div>
-
       {/* Table */}
       <Table aria-label="Trading volume leaderboard">
         <TableHeader>
           <TableColumn>RANK</TableColumn>
           <TableColumn>USER</TableColumn>
           <TableColumn>VOLUME</TableColumn>
-          <TableColumn>XP</TableColumn>
+          <TableColumn>TRADES</TableColumn>
+          <TableColumn>PNL</TableColumn>
+          <TableColumn>REFERRAL VOLUME</TableColumn>
         </TableHeader>
         <TableBody>
-          {sortedData.map((entry) => (
+          {data.map((entry) => (
             <TableRow
               key={entry.userId}
               className={entry.isCurrentUser ? "bg-burgundy/5" : ""}
@@ -117,8 +70,7 @@ export function TradingVolumeTable({ data }: TradingVolumeTableProps) {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <span className="font-medium">
-                    {entry.email ||
-                      `${entry.walletAddress.slice(0, 6)}...${entry.walletAddress.slice(-4)}`}
+                    {entry.email || entry.walletAddress}
                   </span>
                   {entry.isCurrentUser && (
                     <Chip color="primary" size="sm" variant="flat">
@@ -129,18 +81,55 @@ export function TradingVolumeTable({ data }: TradingVolumeTableProps) {
               </TableCell>
               <TableCell>
                 <span className="font-semibold text-burgundy">
-                  ${getVolumeForTimeRange(entry).toLocaleString()}
+                  ${formatNumber(entry.volume)}
                 </span>
               </TableCell>
               <TableCell>
                 <span className="font-semibold">
-                  {entry.xp.toLocaleString()}
+                  {entry.fillCount?.toLocaleString() || "0"}
+                </span>
+              </TableCell>
+              <TableCell>
+                <span
+                  className={`font-semibold ${(entry.realizedPnl || 0) >= 0 ? "text-success" : "text-danger"}`}
+                >
+                  ${formatNumber(entry.realizedPnl)}
+                </span>
+              </TableCell>
+              <TableCell>
+                <span className="font-semibold text-secondary">
+                  ${formatNumber(entry.referralVolume)}
                 </span>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+
+      {/* Pagination Controls */}
+      {onPageChange && (
+        <div className="flex items-center justify-between">
+          <Button
+            color="primary"
+            isDisabled={!hasPrevious}
+            size="sm"
+            variant="flat"
+            onPress={() => onPageChange(page - 1)}
+          >
+            Previous
+          </Button>
+          <span className="text-sm text-stable-gray">Page {page}</span>
+          <Button
+            color="primary"
+            isDisabled={!hasNext}
+            size="sm"
+            variant="flat"
+            onPress={() => onPageChange(page + 1)}
+          >
+            Next
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

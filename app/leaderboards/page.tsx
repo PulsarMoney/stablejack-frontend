@@ -22,11 +22,13 @@ export default function LeaderboardsPage() {
   const [selectedTab, setSelectedTab] = useState<"trading" | "public">(
     "trading",
   );
+  const [tradingPage, setTradingPage] = useState(1);
+  const [publicPage, setPublicPage] = useState(1);
 
-  const { data: tradingData, isLoading: tradingLoading } =
-    useGetTradingLeaderboard({ limit: 100 });
-  const { data: publicData, isLoading: publicLoading } =
-    useGetPublicLeaderboard({ limit: 100 });
+  const { data: tradingResponse, isLoading: tradingLoading } =
+    useGetTradingLeaderboard({ limit: 20, page: tradingPage });
+  const { data: publicResponse, isLoading: publicLoading } =
+    useGetPublicLeaderboard({ limit: 20, page: publicPage });
   const { data: userRank, isLoading: rankLoading } = useGetUserRank();
 
   useEffect(() => {
@@ -34,6 +36,11 @@ export default function LeaderboardsPage() {
       router.push("/");
     }
   }, [isAuthenticated, isLoading, router]);
+
+  const tradingData = tradingResponse?.data;
+  const tradingPagination = tradingResponse?.pagination;
+  const publicData = publicResponse?.data;
+  const publicPagination = publicResponse?.pagination;
 
   if (isLoading || tradingLoading || publicLoading || rankLoading) {
     return (
@@ -76,10 +83,22 @@ export default function LeaderboardsPage() {
         <Card className="border-2 border-burgundy/20">
           <CardBody className="p-6">
             {selectedTab === "trading" && tradingData && (
-              <TradingVolumeTable data={tradingData} />
+              <TradingVolumeTable
+                data={tradingData}
+                hasNext={tradingPagination?.hasNext}
+                hasPrevious={tradingPagination?.hasPrevious}
+                page={tradingPage}
+                onPageChange={setTradingPage}
+              />
             )}
             {selectedTab === "public" && publicData && (
-              <PublicXPTable data={publicData} />
+              <PublicXPTable
+                data={publicData}
+                hasNext={publicPagination?.hasNext}
+                hasPrevious={publicPagination?.hasPrevious}
+                page={publicPage}
+                onPageChange={setPublicPage}
+              />
             )}
           </CardBody>
         </Card>

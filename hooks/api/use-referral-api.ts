@@ -82,7 +82,7 @@ export const useGetReferralStats = () => {
       // Fetch user's referral data (referrer info, leaderboard)
       const meResponse = await apiClient.get<
         ApiResponse<BackendUserReferralData>
-      >("/api/referral/tree/me");
+      >("/api/referral/me");
 
       // Transform backend tree to frontend referrals array
       const referrals = transformTreeToReferrals(treeResponse.data.data);
