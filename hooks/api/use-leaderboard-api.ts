@@ -18,8 +18,7 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 
 export const useGetTradingLeaderboard = (filters?: LeaderboardFilters) => {
-  const { user } = useAuth();
-  const currentUserId = user?.id;
+  const { address } = useAuth(); // Get user's wallet address from Privy
 
   return useQuery({
     queryKey: ["leaderboard", "trading", filters],
@@ -42,6 +41,12 @@ export const useGetTradingLeaderboard = (filters?: LeaderboardFilters) => {
       // Calculate starting rank based on pagination
       const startRank = (pagination.page - 1) * pagination.limit + 1;
 
+      // Find current user by matching wallet address in the leaderboard data
+      const currentUserEntry = leaderboard.find(
+        (entry: any) => entry.address?.toLowerCase() === address?.toLowerCase()
+      );
+      const currentUserId = currentUserEntry?.userId;
+
       return {
         data: transformVolumeLeaderboard(leaderboard, currentUserId, startRank),
         pagination,
@@ -51,8 +56,7 @@ export const useGetTradingLeaderboard = (filters?: LeaderboardFilters) => {
 };
 
 export const useGetPublicLeaderboard = (filters?: LeaderboardFilters) => {
-  const { user } = useAuth();
-  const currentUserId = user?.id;
+  const { address } = useAuth(); // Get user's wallet address from Privy
 
   return useQuery({
     queryKey: ["leaderboard", "public", filters],
@@ -72,6 +76,12 @@ export const useGetPublicLeaderboard = (filters?: LeaderboardFilters) => {
       const page = filters?.page || 1;
       const limit = filters?.limit || 20;
       const startRank = (page - 1) * limit + 1;
+
+      // Find current user by matching wallet address in the leaderboard data
+      const currentUserEntry = leaderboard.find(
+        (entry: any) => entry.address?.toLowerCase() === address?.toLowerCase()
+      );
+      const currentUserId = currentUserEntry?.userId;
 
       // Calculate pagination metadata
       const totalPages = Math.ceil(count / limit);
@@ -93,59 +103,26 @@ export const useGetPublicLeaderboard = (filters?: LeaderboardFilters) => {
 };
 
 export const useGetUserRank = () => {
-  const { user } = useAuth();
-  const currentUserId = user?.id;
-
   return useQuery({
-    queryKey: ["leaderboard", "user-rank", currentUserId],
+    queryKey: ["leaderboard", "user-rank"],
     queryFn: async () => {
-      if (!currentUserId) {
-        throw new Error("User not authenticated");
-      }
+      // Use /api/referral/me which has all the user's leaderboard data
+      const response = await apiClient.get<ApiResponse<any>>("/api/referral/me");
 
-      // Fetch both leaderboards to calculate user's rank (max 100 per request)
-      const [xpResponse, volumeResponse] = await Promise.all([
-        apiClient.get<ApiResponse<BackendXpLeaderboardResponse>>(
-          "/api/leaderboard/xp?page=1&limit=100",
-        ),
-        apiClient.get<ApiResponse<BackendVolumeLeaderboardResponse>>(
-          "/api/leaderboard/volume?period=all-time&page=1&limit=100",
-        ),
-      ]);
-
-      const xpLeaderboard = xpResponse.data.data.leaderboard;
-      const volumeLeaderboard = volumeResponse.data.data.leaderboard;
-
-      // Find user's position in both leaderboards
-      const xpIndex = xpLeaderboard.findIndex(
-        (entry) => entry.userId === currentUserId,
-      );
-      const volumeIndex = volumeLeaderboard.findIndex(
-        (entry) => entry.userId === currentUserId,
-      );
-
-      const userXpEntry = xpLeaderboard[xpIndex];
-      const userVolumeEntry = volumeLeaderboard[volumeIndex];
+      const leaderboardData = response.data.data.leaderboard;
 
       const userRank: UserRank = {
-        publicRank: userXpEntry?.rank || (xpIndex >= 0 ? xpIndex + 1 : -1),
-        totalXP: userXpEntry ? parseFloat(userXpEntry.totalXp) : 0,
-        level: userXpEntry?.level || 1,
-        tradingXPBreakdown: userXpEntry
-          ? parseFloat(userXpEntry.tradingXp)
-          : 0,
-        referralXPBreakdown: userXpEntry
-          ? parseFloat(userXpEntry.referralXp)
-          : 0,
-        achievementXPBreakdown: userXpEntry
-          ? parseFloat(userXpEntry.taskXp) + parseFloat(userXpEntry.bonusXp)
-          : 0,
-        tradingRank: volumeIndex >= 0 ? volumeIndex + 1 : -1,
-        tradingVolume: userVolumeEntry?.totalVolume || 0,
+        publicRank: parseInt(leaderboardData.xp.place),
+        totalXP: parseFloat(leaderboardData.xp.xp),
+        level: leaderboardData.xp.level,
+        tradingXPBreakdown: 0, // Not provided by /me endpoint
+        referralXPBreakdown: 0, // Not provided by /me endpoint
+        achievementXPBreakdown: 0, // Not provided by /me endpoint
+        tradingRank: leaderboardData.volume.place,
+        tradingVolume: parseFloat(leaderboardData.volume.volume),
       };
 
       return userRank;
     },
-    enabled: !!currentUserId,
   });
 };
