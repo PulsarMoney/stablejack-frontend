@@ -15,7 +15,7 @@ import { Select, SelectItem } from "@heroui/select";
 
 import { ReferralListItem } from "./referral-list-item";
 
-import { groupTier2ByParent } from "@/lib/mock-data/mock-referral-data";
+import { groupTier2ByParent } from "@/lib/transform-referral-data";
 
 interface ReferralTreeEnhancedProps {
   referrals: Referral[];

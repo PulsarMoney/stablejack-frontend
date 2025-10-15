@@ -196,3 +196,24 @@ export function calculateAggregateStats(referrals: Referral[]): {
     activeReferrals: referrals.filter((r) => r.isActive).length,
   };
 }
+
+/**
+ * Groups tier 2 referrals by their parent ID
+ * Used for organizing the referral tree hierarchy
+ */
+export function groupTier2ByParent(
+  referrals: Referral[],
+): Map<string, Referral[]> {
+  const tier2ByParent = new Map<string, Referral[]>();
+
+  referrals
+    .filter((r) => r.tier === 2 && r.parentId)
+    .forEach((tier2) => {
+      const parentId = tier2.parentId!;
+      const existing = tier2ByParent.get(parentId) || [];
+
+      tier2ByParent.set(parentId, [...existing, tier2]);
+    });
+
+  return tier2ByParent;
+}
