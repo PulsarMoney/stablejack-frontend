@@ -26,7 +26,9 @@ export function transformVolumeEntry(
   return {
     rank,
     userId: entry.userId,
-    walletAddress: generateDisplayAddress(entry.userId),
+    email: entry.username || undefined,
+    // Use real wallet address if available, otherwise generate from userId
+    walletAddress: entry.address || generateDisplayAddress(entry.userId),
     volume: entry.totalVolume,
     fillCount: entry.fillCount,
     realizedPnl: entry.realizedPnl,

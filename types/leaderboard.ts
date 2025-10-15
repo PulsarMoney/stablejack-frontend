@@ -1,6 +1,8 @@
 // Backend response types
 export interface BackendVolumeLeaderboardEntry {
   userId: string;
+  username?: string; // Email/username if available
+  address?: string; // Wallet address if available
   totalVolume: number;
   fillCount: number;
   realizedPnl: number;
